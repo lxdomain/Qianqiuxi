@@ -1,0 +1,108 @@
+:root {
+    --text-shadow-color: rgb(68, 50, 32);
+    --text-color1: rgb(255, 253, 200);
+    --text-color2: rgb(145, 145, 120);
+    --text-color3: rgb(218, 217, 198);
+    --text-border-color: rgb(172, 185, 204);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    box-sizing: border-box;
+}
+
+.wrapper {
+    height: 100%;
+    width: 100%;
+    background-image: url('../background.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.box-top, .box-bottom {
+    margin-top: 50px;
+    height: 40%;
+    width: 80%;
+    box-shadow: 10px 10px 100px 0px var(--text-shadow-color) inset;
+    font-size: 16px;
+}
+
+.box-bottom {
+    margin-bottom: 10px;
+}
+
+.notice {
+    position: relative;
+    float: left;
+}
+
+.specialcardrepo, .specialcardselected {
+    padding: 1em 1em;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 2em;
+    text-shadow: 2px 2px black;
+    color: var(--text-color1);
+}
+
+.ceiling {
+    margin: 2em 2em;
+    font-style: normal;
+    font-weight: bold;
+    font-size: 1.5em;
+    text-shadow: 1.5px 1.5px black;
+    color: var(--text-color2);
+}
+
+.backbtn, .startbtn {
+    padding: 10px 20px;
+    position: relative;
+    top: 0;
+    left: 0;
+    background: transparent;
+    border: 2px solid var(--text-border-color);
+    color: var(--text-color3);
+    font-size: 1.5em;
+    opacity: 0.8;
+    cursor: pointer;
+}
+
+.backbtn {
+    left: 35%;
+}
+
+.startbtn {
+    left: 45%;
+}
+
+.backbtn:hover, .startbtn:hover {
+    background-color: var(--text-shadow-color);
+    transition-duration: 400ms;
+}
+
+#cardcontainer {
+    position: relative;
+    top: 5%;
+    left: 7.5%;
+    overflow: hidden;
+}
+
+.selected {
+    margin: 5px 10px;
+    height: 10em;
+    width: 7.5em;
+    box-shadow: 10px 10px 100px 0px var(--text-shadow-color) inset;
+    display: inline-block;
+}
+
+.line {
+    position: relative;
+    float: left;
+}
