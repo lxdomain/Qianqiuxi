@@ -1,9 +1,12 @@
 :root {
     --text-shadow-color: rgb(68, 50, 32);
+    --text-border-color: rgb(172, 185, 204);
+    --text-hr-color: rgb(188, 127, 9);
     --text-color1: rgb(255, 253, 200);
     --text-color2: rgb(145, 145, 120);
     --text-color3: rgb(218, 217, 198);
-    --text-border-color: rgb(172, 185, 204);
+    --text-color4: rgb(207, 162, 13);
+    --text-color5: rgb(255, 224, 107);
 }
 
 * {
@@ -13,6 +16,31 @@
 
 body {
     box-sizing: border-box;
+}
+
+hr {
+    height: 2px;
+    background-color: var(--text-hr-color);
+    border: none;
+}
+
+::-webkit-scrollbar {
+    width: 15px;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: var(--text-shadow-color);
+}
+
+::-webkit-scrollbar-button {
+    height: 20px;
+    border-radius: 10px;
+    background-color: var(--text-shadow-color);
 }
 
 .wrapper {
@@ -34,11 +62,19 @@ body {
     font-size: 16px;
 }
 
+.box-right {
+    height: 100%;
+    width: 17%;
+    float: right;
+}
+
 .box-bottom {
     margin-bottom: 10px;
 }
 
 .notice {
+    height: 100%;
+    width: 25%;
     position: relative;
     float: left;
 }
@@ -87,14 +123,7 @@ body {
     transition-duration: 400ms;
 }
 
-#cardcontainer {
-    position: relative;
-    top: 5%;
-    left: 7.5%;
-    overflow: hidden;
-}
-
-.selected {
+.selected, .scanned {
     margin: 5px 10px;
     height: 10em;
     width: 7.5em;
@@ -102,7 +131,70 @@ body {
     display: inline-block;
 }
 
-.line {
-    position: relative;
+.scanned {
+    background-size: cover;
+}
+
+.scanned:hover, ::-webkit-scrollbar-thumb:hover, ::-webkit-scrollbar-button:hover {
+    border: 1px solid var(--text-color4);
+    box-sizing: border-box;
+}
+
+#cardrepository, #cardcontainer {
+    height: 100%;
+    width: 75%;
     float: left;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+#cardpreview {
+    height: 40%;
+    width: 100%;
+}
+
+#previewbox {
+    margin: 20%;
+    height: 16em;
+    width: 12em;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: inline-block;
+}
+
+#carddescription {
+    height: 60%;
+    width: 100%;
+}
+
+.descriptiontext {
+    font-style: normal;
+    font-weight: bold;
+    font-size: 1em;
+    letter-spacing: 2px;
+    text-shadow: 1px 1px black;
+    color: var(--text-color1);
+}
+
+#partone {
+    margin: 0 20%;
+    height: 10%;
+    width: 100%;
+    line-height: 1.5;
+    font-size: 2em;
+    color: var(--text-color5);
+}
+
+#parttwo {
+    margin: 10% 20% 0 20%;
+    height: 30%;
+    width: 100%;
+    line-height: 1.5;
+}
+
+#partthree {
+    margin: 20% 20% 0 20%;
+    height: 60%;
+    width: 100%;
+    line-height: 2;
 }
