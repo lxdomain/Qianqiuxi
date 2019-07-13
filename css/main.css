@@ -54,21 +54,22 @@ hr {
     left: 0;
 }
 
-.box-top, .box-bottom {
+#box-top, #box-bottom {
     margin-top: 50px;
     height: 40%;
     width: 80%;
     box-shadow: 10px 10px 100px 0px var(--text-shadow-color) inset;
     font-size: 16px;
+    display: inline-block;
 }
 
-.box-right {
+#box-right {
     height: 100%;
     width: 17%;
     float: right;
 }
 
-.box-bottom {
+#box-bottom {
     margin-bottom: 10px;
 }
 
@@ -97,7 +98,7 @@ hr {
     color: var(--text-color2);
 }
 
-.backbtn, .startbtn {
+.btn {
     padding: 10px 20px;
     position: relative;
     top: 0;
@@ -110,15 +111,15 @@ hr {
     cursor: pointer;
 }
 
-.backbtn {
+#backbtn {
     left: 35%;
 }
 
-.startbtn {
+#startbtn {
     left: 45%;
 }
 
-.backbtn:hover, .startbtn:hover {
+.btn:hover {
     background-color: var(--text-shadow-color);
     transition-duration: 400ms;
 }
@@ -167,6 +168,12 @@ hr {
     width: 100%;
 }
 
+#descriptionbox {
+    height: 60%;
+    width: 80%;
+    margin: 0 auto;
+}
+
 .descriptiontext {
     font-style: normal;
     font-weight: bold;
@@ -177,23 +184,23 @@ hr {
 }
 
 #partone {
-    margin: 0 20%;
-    height: 10%;
+    height: 20%;
     width: 100%;
     line-height: 1.5;
-    font-size: 2em;
+    font-size: 1.5em;
     color: var(--text-color5);
+    text-align: center;
 }
 
 #parttwo {
-    margin: 10% 20% 0 20%;
-    height: 30%;
+    margin-top: 10%;
+    height: 40%;
     width: 100%;
     line-height: 1.5;
 }
 
 #partthree {
-    margin: 20% 20% 0 20%;
+    margin-top: 20%;
     height: 60%;
     width: 100%;
     line-height: 2;
