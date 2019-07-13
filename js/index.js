@@ -1,9 +1,5 @@
 CEILING = 15;
 TOTAL_SPECIAL_CARD = 44;
-var selected = document.getElementById('cardcontainer');
-var scanned = document.getElementById('cardrepository');
-var previewed = document.getElementById('previewbox');
-var described = document.getElementsByClassName('descriptiontext');
 
 specialCardList =
     [
@@ -54,6 +50,22 @@ specialCardList =
     ]
 
 window.onload = function () {
+    var described = document.getElementsByClassName('descriptiontext');
+    var selected = document.getElementsByClassName('selected');
+    var counting = document.getElementById('ceilingcount');
+    var startBtn = document.getElementById('startbtn');
+    var configuratorContent = document.getElementsByClassName('configurator');
+
+    var isCeiling = function () {
+        return counting.innerHTML == CEILING;
+    }
+
+    startBtn.onclick = function () {
+        for (let i = 0; i < configuratorContent.length; i++) {
+            configuratorContent[i].style.display = 'none';
+        }
+    }
+
     for (let i = 0; i < CEILING; i++) {
         var selectedCard = document.createElement('div');
         selectedCard.classList.add('selected');
@@ -67,7 +79,7 @@ window.onload = function () {
         cardrepository.appendChild(card);
 
         card.onmouseover = function () {
-            previewed.style.backgroundImage = this.style.backgroundImage;
+            previewbox.style.backgroundImage = this.style.backgroundImage;
             var cardName = specialCardList[i][1];
             var nameArr = cardName.split('·');
             described[0].innerHTML = nameArr[0] + '&#9733' + ' ' + specialCardList[i][0] + '分' + '<br>' + '<hr>';
@@ -76,10 +88,26 @@ window.onload = function () {
         }
 
         card.onmouseout = function () {
-            previewed.style.backgroundImage = '';
+            previewbox.style.backgroundImage = '';
             described[0].innerHTML = '';
             described[1].innerHTML = '';
             described[2].innerHTML = '';
+        }
+
+        card.onclick = function () {
+            if (!isCeiling() && this.parentElement.id == 'cardrepository') {
+                cardrepository.removeChild(this);
+                cardcontainer.replaceChild(this, selected[0]);
+            }
+            else if (this.parentElement.id == 'cardcontainer') {
+                cardcontainer.removeChild(this);
+                var selectedCard = document.createElement('div');
+                selectedCard.classList.add('selected');
+                cardcontainer.appendChild(selectedCard, this);
+                cardrepository.appendChild(this);
+            }
+            counting.innerHTML = TOTAL_SPECIAL_CARD - cardrepository.childNodes.length;
+            counting.style.color = isCeiling() ? 'red' : 'rgb(145, 145, 120)';
         }
     }
 }
