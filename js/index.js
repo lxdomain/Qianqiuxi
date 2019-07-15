@@ -53,17 +53,9 @@ window.onload = function () {
     var described = document.getElementsByClassName('descriptiontext');
     var selected = document.getElementsByClassName('selected');
     var counting = document.getElementById('ceilingcount');
-    var startBtn = document.getElementById('startbtn');
-    var configuratorContent = document.getElementsByClassName('configurator');
 
     var isCeiling = function () {
         return counting.innerHTML == CEILING;
-    }
-
-    startBtn.onclick = function () {
-        for (let i = 0; i < configuratorContent.length; i++) {
-            configuratorContent[i].style.display = 'none';
-        }
     }
 
     for (let i = 0; i < CEILING; i++) {
