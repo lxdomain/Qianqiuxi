@@ -8,6 +8,7 @@
     <title>千秋戏</title>
     <link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
     <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/reporter.css">
 </head>
 
 <body>
@@ -41,8 +42,31 @@
         </div>
         <button class="btn configurator" id="backbtn">放弃牌局</button>
         <button class="btn configurator" id="startbtn">开始一局</button>
+        <div id="scoreboard" class="controller">
+            <div class="yourboard"></div>
+            <div class="score" id="yourscore">0</div>
+            <div class="score" id="myscore">0</div>
+            <div class="myboard"></div>
+        </div>
+        <div id="table" class="controller">
+            <div id="yourcontainer">
+                <div id="yourcards"></div>
+            </div>
+            <div id="poolcontainer">
+                <div id="poolcards"></div>
+            </div>
+            <div id="mycontainer">
+                <div id="mycards"></div>
+            </div>
+        </div>
+        <div id="specialboard" class="controller">
+            <div class="samplecard"></div>
+            <div class="infobox"></div>
+            <div class="specialcard"></div>
+        </div>
     </div>
     <script src="js/index.js"></script>
+    <script src="js/controller.js"></script>
 </body>
 
 </html>
