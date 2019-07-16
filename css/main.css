@@ -2,11 +2,15 @@
     --text-shadow-color: rgb(68, 50, 32);
     --text-border-color: rgb(172, 185, 204);
     --text-hr-color: rgb(188, 127, 9);
+    --text-score-color: rgb(249, 235, 174);
     --text-color1: rgb(255, 253, 200);
     --text-color2: rgb(145, 145, 120);
     --text-color3: rgb(218, 217, 198);
     --text-color4: rgb(207, 162, 13);
     --text-color5: rgb(255, 224, 107);
+    --card-width: 144.873px;
+    --card-height: 193.163px;
+    --card-border-color: #fceba4;
 }
 
 * {
@@ -161,6 +165,7 @@ hr {
     background-repeat: no-repeat;
     background-size: cover;
     display: inline-block;
+    border-radius: 10px;
 }
 
 #carddescription {
