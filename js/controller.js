@@ -9,7 +9,10 @@ var controllerContent = document.getElementsByClassName('controller');
 var poolCards = document.getElementById('poolcards');
 var yourCards = document.getElementById('yourcards');
 var myCards = document.getElementById('mycards');
+var cardContainer = document.getElementById('cardcontainer');
+var specialCard = document.getElementById('specialcard');
 var visited = new Array(TOTAL_NORMAL_CARD).fill(0);
+var mySpecialCardList = [];
 
 normalCardList = [
     ['2', '风晴雪', ' 青丝银栉别样梳，<br>天付婆娑入画图。'],
@@ -100,16 +103,41 @@ normalCardList = [
 
 
 startBtn.onclick = function () {
+    hidePage();
+    saveMySpecialCard();
+    showMySpecialCard();
+    cardBackTransition(3, 2, poolCards);
+    cardBackTransition(10, 8, yourCards);
+    cardTransition(MIN_POOL_CARDS, 8, poolCards);
+    cardTransition(CARD_FOR_EACH, 8, myCards);
+}
+
+function hidePage() {
     for (let i = 0; i < configuratorContent.length; i++) {
         configuratorContent[i].style.display = 'none';
     }
     for (let i = 0; i < controllerContent.length; i++) {
         controllerContent[i].style.display = 'block';
     }
-    cardBackTransition(3, 2, poolCards);
-    cardBackTransition(10, 8, yourCards);
-    cardTransition(MIN_POOL_CARDS, 8, poolCards);
-    cardTransition(CARD_FOR_EACH, 8, myCards);
+}
+
+function saveMySpecialCard() {
+    for (let i = 0; i < cardContainer.childNodes.length; i++) {
+        if (cardContainer.childNodes[i].classList.contains('scanned')) {
+            var name = cardContainer.childNodes[i].style.backgroundImage.slice(9, -6);
+            mySpecialCardList.push(name);
+        }
+    }
+}
+
+function showMySpecialCard() {
+    for (let i = 0; i < mySpecialCardList.length; i++) {
+        var card = document.createElement('div');
+        card.classList.add('card');
+        card.style.backgroundImage = 'url(img/' + mySpecialCardList[i] + '.jpg)';
+        card.style.transform = 'rotate(' + getRandom(45) * (i & 1 ? -1 : 1) + 'deg)';
+        specialCard.appendChild(card);
+    }
 }
 
 function cardBackTransition(num, base, parent) {
@@ -125,7 +153,7 @@ function cardBackTransition(num, base, parent) {
             cardBack.style.left = base * i + '%';
             cardBack.style.bottom = (i & 1) + '%';
         }
-        cardBack.style.zIndex = i;
+        cardBack.style.zIndex = num - i - 1;
         parent.appendChild(cardBack);
     }
 }
@@ -141,7 +169,6 @@ function cardTransition(num, base, parent) {
         if (!visited[index]) {
             visited[index] = true;
             cards.push(index);
-            console.log(index);
         }
     }
     for (let i = 0; i < num; i++) {
@@ -149,7 +176,8 @@ function cardTransition(num, base, parent) {
         card.classList.add('card');
         card.style.backgroundImage = 'url(img/' + normalCardList[cards[i]][1] + '.jpg)';
         card.style.left = base * (i + (num == MIN_POOL_CARDS)) + '%';
-        card.style.zIndex = i;
+        card.style.bottom = (i & 1) + '%';
+        card.style.zIndex = num - i - 1;
         parent.appendChild(card);
     }
 }
