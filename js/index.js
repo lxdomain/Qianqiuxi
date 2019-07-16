@@ -71,6 +71,10 @@ window.onload = function () {
         cardrepository.appendChild(card);
 
         card.onmouseover = function () {
+            previewbox.classList.add('cardcontent');
+            described[0].classList.add('cardcontent');
+            described[1].classList.add('cardcontent');
+            described[2].classList.add('cardcontent');
             previewbox.style.backgroundImage = this.style.backgroundImage;
             var cardName = specialCardList[i][1];
             var nameArr = cardName.split('·');
@@ -80,6 +84,10 @@ window.onload = function () {
         }
 
         card.onmouseout = function () {
+            previewbox.classList.remove('cardcontent');
+            described[0].classList.remove('cardcontent');
+            described[1].classList.remove('cardcontent');
+            described[2].classList.remove('cardcontent');
             previewbox.style.backgroundImage = '';
             described[0].innerHTML = '';
             described[1].innerHTML = '';
