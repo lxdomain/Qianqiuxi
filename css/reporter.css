@@ -1,9 +1,3 @@
-:root {
-    --score-color: rgb(249, 235, 174);
-    --card-width: 144.873px;
-    --card-height: 193.163px;
-}
-
 .controller {
     display: none;
 }
@@ -37,7 +31,7 @@
 
 .score {
     text-align: center;
-    color: var(--score-color);
+    color: var(--text-score-color);
     font-size: 5em;
     font-weight: bold;
     text-shadow: 2px 4px black;
@@ -81,7 +75,7 @@
     width: 100%;
 }
 
-.samplecard, .specialcard {
+.samplecard, #specialcard {
     height: var(--card-height);
     width: var(--card-width);
     position: absolute;
@@ -95,7 +89,7 @@
     left: 25%;
 }
 
-.specialcard {
+#specialcard {
     bottom: 5%;
     left: 25%;
 }
@@ -112,15 +106,6 @@
     width: 100%;
     position: relative;
     top: 30%;
-}
-
-@keyframes cardtransition {
-    0% {
-        right: 0;
-    }
-    100% {
-        right: 3%;
-    }
 }
 
 .card {
