@@ -3,6 +3,7 @@ TOTAL_NORMAL_CARD = 84;
 MIN_POOL_CARDS = 8;
 MAX_POOL_CARDS = 10;
 
+var backBtn = document.getElementById('backbtn');
 var startBtn = document.getElementById('startbtn');
 var configuratorContent = document.getElementsByClassName('configurator');
 var controllerContent = document.getElementsByClassName('controller');
@@ -11,8 +12,14 @@ var yourCards = document.getElementById('yourcards');
 var myCards = document.getElementById('mycards');
 var cardContainer = document.getElementById('cardcontainer');
 var specialCard = document.getElementById('specialcard');
+var specialCardViewport = document.getElementById('specialcardviewport');
+var viewportContainer = document.getElementById('viewportcontainer');
+var boxRight = document.getElementById('box-right');
+var viewportTitle = document.getElementById('viewporttitle');
+var viewportBack = document.getElementById('viewportback');
 var visited = new Array(TOTAL_NORMAL_CARD).fill(0);
 var mySpecialCardList = [];
+var specialCardListener = false;
 
 normalCardList = [
     ['2', '风晴雪', ' 青丝银栉别样梳，<br>天付婆娑入画图。'],
@@ -101,6 +108,9 @@ normalCardList = [
     ['2', '阿翔', '一团冰雪含奇质，<br>万里云霄豁俊眸。'],
 ]
 
+backBtn.onclick = function () {
+    window.location.reload();
+}
 
 startBtn.onclick = function () {
     hidePage();
@@ -110,6 +120,57 @@ startBtn.onclick = function () {
     cardBackTransition(10, 8, yourCards);
     cardTransition(MIN_POOL_CARDS, 8, poolCards);
     cardTransition(CARD_FOR_EACH, 8, myCards);
+}
+
+specialCard.onclick = function () {
+    for (let i = 0; i < controllerContent.length; i++) {
+        controllerContent[i].style.display = 'none';
+    }
+    specialCardViewport.style.display = 'block';
+    viewportTitle.style.display = 'block';
+    boxRight.style.display = 'block';
+    if (!specialCardListener) {
+        specialCardListener = true;
+        for (let i = 0; i < mySpecialCardList.length; i++) {
+            var card = document.createElement('div');
+            card.classList.add('scanned');
+            card.style.backgroundImage = 'url(img/' + mySpecialCardList[i] + '.jpg)';
+            viewportContainer.appendChild(card);
+
+            card.onmouseover = function () {
+                previewbox.classList.add('cardcontent');
+                described[0].classList.add('cardcontent');
+                described[1].classList.add('cardcontent');
+                described[2].classList.add('cardcontent');
+
+                previewbox.style.backgroundImage = this.style.backgroundImage;
+
+                described[0].innerHTML = mySpecialCardList[i].split('·')[0] + '&#9733' + ' ' + specialCardList.get(mySpecialCardList[i])[0] + '分' + '<br>' + '<hr>';
+                described[1].innerHTML = mySpecialCardList[i] + '<br>' + specialCardList.get(mySpecialCardList[i])[1] + '<br>';
+                described[2].innerHTML = specialCardList.get(mySpecialCardList[i])[2];
+            }
+
+            card.onmouseout = function () {
+                previewbox.classList.remove('cardcontent');
+                described[0].classList.remove('cardcontent');
+                described[1].classList.remove('cardcontent');
+                described[2].classList.remove('cardcontent');
+                previewbox.style.backgroundImage = '';
+                described[0].innerHTML = '';
+                described[1].innerHTML = '';
+                described[2].innerHTML = '';
+            }
+        }
+    }
+}
+
+viewportBack.onclick = function () {
+    for (let i = 0; i < controllerContent.length; i++) {
+        controllerContent[i].style.display = 'block';
+    }
+    specialCardViewport.style.display = 'none';
+    viewportTitle.style.display = 'none';
+    boxRight.style.display = 'none';
 }
 
 function hidePage() {
