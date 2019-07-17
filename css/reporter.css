@@ -116,3 +116,60 @@
     background-size: cover;
     border-radius: 10px;
 }
+
+#specialcardviewport {
+    height: 80%;
+    width: 64%;
+    position: absolute;
+    left: 51%;
+    top: 55%;
+    margin-left: -32%;
+    margin-top: -20%;
+    display: none;
+}
+
+#viewportcontainer {
+    position: absolute;
+    height: 100%;
+    width: 90%;
+    left: 50%;
+    margin-left: -45%;
+}
+
+#viewporttitle {
+    height: 10%;
+    width: 100%;
+    background-color: var(--text-color7);
+    opacity: 0.5;
+    display: none;
+}
+
+#viewporttext {
+    height: 50%;
+    width: 18.5%;
+    display: inline-block;
+    font-size: 2em;
+    font-family: '宋体';
+    text-align: center;
+    text-shadow: 3px 3px 5px var(--text-color5);
+    color: var(--text-color8);
+    position: relative;
+    top: 50%;
+}
+
+#viewportback {
+    height: 75%;
+    width: 15%;
+    display: inline-block;
+    font-size: 2.5em;
+    font-family: '华文彩云';
+    text-align: center;
+    color: var(--text-color9);
+    position: relative;
+    top: 25%;
+    left: 65%;
+}
+
+#viewportback:hover {
+    text-shadow: 3px 3px 5px var(--text-color5);
+}
