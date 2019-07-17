@@ -8,6 +8,10 @@
     --text-color3: rgb(218, 217, 198);
     --text-color4: rgb(207, 162, 13);
     --text-color5: rgb(255, 224, 107);
+    --text-color6: rgb(197, 42, 45);
+    --text-color7: rgb(56, 40, 28);
+    --text-color8: rgb(249, 244, 206);
+    --text-color9: rgb(250, 228, 164);
     --card-width: 144.873px;
     --card-height: 193.163px;
     --card-border-color: #fceba4;
@@ -16,6 +20,7 @@
 * {
     margin: 0;
     padding: 0;
+    cursor: default;
 }
 
 body {
@@ -132,12 +137,31 @@ hr {
     margin: 5px 10px;
     height: 10em;
     width: 7.5em;
-    box-shadow: 10px 10px 100px 0px var(--text-shadow-color) inset;
     display: inline-block;
+}
+
+.selected {
+    box-shadow: 10px 10px 100px 0px var(--text-shadow-color) inset;
 }
 
 .scanned {
     background-size: cover;
+}
+
+.banned {
+    color: var(--text-color6);
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+    text-shadow: 1px 1px black;
+    position: relative;
+    top: 40%;
+    left: 25%;
+    float: left;
+}
+
+.shadow {
+    box-shadow: 10px 10px 100px 0px var(--text-shadow-color) inset;
 }
 
 .scanned:hover, ::-webkit-scrollbar-thumb:hover, ::-webkit-scrollbar-button:hover {
@@ -159,7 +183,7 @@ hr {
 }
 
 #previewbox {
-    margin: 20%;
+    margin: 30% 20% 0 20%;
     height: 16em;
     width: 12em;
     background-repeat: no-repeat;
