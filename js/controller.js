@@ -17,9 +17,18 @@ var viewportContainer = document.getElementById('viewportcontainer');
 var boxRight = document.getElementById('box-right');
 var viewportTitle = document.getElementById('viewporttitle');
 var viewportBack = document.getElementById('viewportback');
+var yourBoard = document.getElementById('yourboard');
+var myBoard = document.getElementById('myboard');
+var viewportText = document.getElementById('viewporttext');
+var boxLeft = document.getElementById('box-left');
+var ownedCard = document.getElementById('ownedcard');
+var completedComb = document.getElementById('completedcomb');
+var recommendedComb = document.getElementById('recommendedcomb');
 var visited = new Array(TOTAL_NORMAL_CARD).fill(0);
 var mySpecialCardList = [];
 var specialCardListener = false;
+var checkedListener = false;
+var combCardListener = false;
 
 normalCardList = [
     ['2', '风晴雪', ' 青丝银栉别样梳，<br>天付婆娑入画图。'],
@@ -113,7 +122,7 @@ backBtn.onclick = function () {
 }
 
 startBtn.onclick = function () {
-    hidePage();
+    hideFirstPageAndShowSecondPage();
     saveMySpecialCard();
     showMySpecialCard();
     cardBackTransition(3, 2, poolCards);
@@ -123,12 +132,8 @@ startBtn.onclick = function () {
 }
 
 specialCard.onclick = function () {
-    for (let i = 0; i < controllerContent.length; i++) {
-        controllerContent[i].style.display = 'none';
-    }
-    specialCardViewport.style.display = 'block';
-    viewportTitle.style.display = 'block';
-    boxRight.style.display = 'block';
+    hideSecondPageAndShowThirdPage();
+    viewportText.innerHTML = '我方珍稀牌&nbsp;&gt;&gt;&gt;';
     if (!specialCardListener) {
         specialCardListener = true;
         for (let i = 0; i < mySpecialCardList.length; i++) {
@@ -162,24 +167,133 @@ specialCard.onclick = function () {
             }
         }
     }
+    else {
+        for (let i = 0; i < viewportContainer.childNodes.length; i++) {
+            viewportContainer.childNodes[i].style.display = 'inline-block';
+        }
+    }
+    hideRecommendedComb();
 }
 
 viewportBack.onclick = function () {
-    for (let i = 0; i < controllerContent.length; i++) {
-        controllerContent[i].style.display = 'block';
-    }
-    specialCardViewport.style.display = 'none';
-    viewportTitle.style.display = 'none';
-    boxRight.style.display = 'none';
+    hideThirdPageAndShowSecondPage();
 }
 
-function hidePage() {
+yourBoard.onclick = function () {
+    hideSecondPageAndShowThirdPage();
+    viewportText.innerHTML = '对方牌组&nbsp;&gt;&gt;&gt;';
+    boxLeft.style.display = 'block';
+    recommendedComb.style.display = 'none';
+    for (let i = 0; i < viewportContainer.childNodes.length; i++) {
+        viewportContainer.childNodes[i].style.display = 'none';
+    }
+    checked();
+    ownedCard.onclick();
+}
+
+myBoard.onclick = function () {
+    hideSecondPageAndShowThirdPage();
+    viewportText.innerHTML = '我方牌组&nbsp;&gt;&gt;&gt;';
+    boxLeft.style.display = 'block';
+    recommendedComb.style.display = 'block';
+    for (let i = 0; i < viewportContainer.childNodes.length; i++) {
+        viewportContainer.childNodes[i].style.display = 'none';
+    }
+    checked();
+    ownedCard.onclick();
+}
+
+ownedCard.onclick = function () {
+    if (completedComb.innerHTML.indexOf('&nbsp;&gt;') != -1) {
+        completedComb.innerHTML = '已完成的组对';
+        this.innerHTML += '&nbsp;&gt;';
+    }
+    else if (recommendedComb.innerHTML.indexOf('&nbsp;&gt;') != -1) {
+        recommendedComb.innerHTML = '查看推荐组对';
+        this.innerHTML += '&nbsp;&gt;';
+    }
+    hideRecommendedComb();
+}
+
+completedComb.onclick = function () {
+    if (ownedCard.innerHTML.indexOf('&nbsp;&gt;') != -1) {
+        ownedCard.innerHTML = '已拥有的卡牌';
+        this.innerHTML += '&nbsp;&gt;';
+    }
+    else if (recommendedComb.innerHTML.indexOf('&nbsp;&gt;') != -1) {
+        recommendedComb.innerHTML = '查看推荐组对';
+        this.innerHTML += '&nbsp;&gt;';
+    }
+    hideRecommendedComb();
+}
+
+recommendedComb.onclick = function () {
+    if (ownedCard.innerHTML.indexOf('&nbsp;&gt;') != -1) {
+        ownedCard.innerHTML = '已拥有的卡牌';
+        this.innerHTML += '&nbsp;&gt;';
+    }
+    else if (completedComb.innerHTML.indexOf('&nbsp;&gt;') != -1) {
+        completedComb.innerHTML = '已完成的组对';
+        this.innerHTML += '&nbsp;&gt;';
+    }
+    if (!combCardListener) {
+        combCardListener = true;
+        createRecommendedComb();
+    }
+    else {
+        showRecommendedComb();
+    }
+}
+
+function checked() {
+    if (!checkedListener) {
+        ownedCard.innerHTML += '&nbsp;&gt;';
+        checkedListener = true;
+    }
+}
+
+function hideRecommendedComb() {
+    for (let i = 0; i < viewportContainer.childNodes.length; i++) {
+        if (viewportContainer.childNodes[i].classList.contains('combpiece')) {
+            viewportContainer.childNodes[i].style.display = 'none';
+        }
+    }
+}
+
+function showRecommendedComb() {
+    for (let i = 0; i < viewportContainer.childNodes.length; i++) {
+        if (viewportContainer.childNodes[i].classList.contains('combpiece')) {
+            viewportContainer.childNodes[i].style.display = 'block';
+        }
+    }
+}
+
+function hideFirstPageAndShowSecondPage() {
     for (let i = 0; i < configuratorContent.length; i++) {
         configuratorContent[i].style.display = 'none';
     }
     for (let i = 0; i < controllerContent.length; i++) {
         controllerContent[i].style.display = 'block';
     }
+}
+
+function hideSecondPageAndShowThirdPage() {
+    for (let i = 0; i < controllerContent.length; i++) {
+        controllerContent[i].style.display = 'none';
+    }
+    specialCardViewport.style.display = 'block';
+    viewportTitle.style.display = 'block';
+    boxRight.style.display = 'block';
+}
+
+function hideThirdPageAndShowSecondPage() {
+    for (let i = 0; i < controllerContent.length; i++) {
+        controllerContent[i].style.display = 'block';
+    }
+    specialCardViewport.style.display = 'none';
+    viewportTitle.style.display = 'none';
+    boxRight.style.display = 'none';
+    boxLeft.style.display = 'none';
 }
 
 function saveMySpecialCard() {
@@ -234,7 +348,7 @@ function cardTransition(num, base, parent) {
     }
     for (let i = 0; i < num; i++) {
         var card = document.createElement('div');
-        card.classList.add('card');
+        card.classList.add('card', 'cardshadow');
         card.style.backgroundImage = 'url(img/' + normalCardList[cards[i]][1] + '.jpg)';
         card.style.left = base * (i + (num == MIN_POOL_CARDS)) + '%';
         card.style.bottom = (i & 1) + '%';
