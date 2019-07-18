@@ -29,8 +29,8 @@ body {
 
 hr {
     height: 2px;
-    background-color: var(--text-hr-color);
     border: none;
+    background-image: linear-gradient(to left, rgba(58, 46, 35, 0) 0%, var(--text-hr-color)50%, rgba(58, 46, 35, 0) 100%);
 }
 
 ::-webkit-scrollbar {
@@ -138,6 +138,7 @@ hr {
     height: 10em;
     width: 7.5em;
     display: inline-block;
+    border-radius: 5px;
 }
 
 .selected {
