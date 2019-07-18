@@ -44,10 +44,14 @@
         <button class="btn configurator" id="backbtn">放弃牌局</button>
         <button class="btn configurator" id="startbtn">开始一局</button>
         <div id="scoreboard" class="controller">
-            <div class="yourboard"></div>
-            <div class="score" id="yourscore">0</div>
-            <div class="score" id="myscore">0</div>
-            <div class="myboard"></div>
+            <div id="yourboard"></div>
+            <div class="boardtext" id="yourtext">&nbsp;&nbsp;对方得分
+                <div class="score">0</div>
+            </div>
+            <div class="boardtext" id="mytext">&nbsp;&nbsp;我方得分
+                <div class="score">0</div>
+            </div>
+            <div id="myboard"></div>
         </div>
         <div id="table" class="controller">
             <div id="yourcontainer">
@@ -66,15 +70,21 @@
             <div id="specialcard"></div>
         </div>
         <div id="viewporttitle">
-            <div id="viewporttext">我方珍稀牌 &gt;&gt;&gt;</div>
+            <div id="viewporttext"></div>
             <div id="viewportback">返回牌局</div>
         </div>
         <div id="specialcardviewport">
             <div id="viewportcontainer"></div>
         </div>
+        <div id="box-left">
+            <div class="boardtext" id="ownedcard">已拥有的卡牌</div>
+            <div class="boardtext" id="completedcomb">已完成的组对</div>
+            <div class="boardtext" id="recommendedcomb">查看推荐组对</div>
+        </div>
     </div>
     <script src="js/index.js"></script>
     <script src="js/controller.js"></script>
+    <script src="js/comb.js"></script>
 </body>
 
 </html>
