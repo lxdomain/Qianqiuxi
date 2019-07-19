@@ -1,36 +1,8 @@
-CARD_FOR_EACH = 10;
-TOTAL_NORMAL_CARD = 84;
-MIN_POOL_CARDS = 8;
-MAX_POOL_CARDS = 10;
-
-var backBtn = document.getElementById('backbtn');
-var startBtn = document.getElementById('startbtn');
-var configuratorContent = document.getElementsByClassName('configurator');
-var controllerContent = document.getElementsByClassName('controller');
-var poolCards = document.getElementById('poolcards');
-var yourCards = document.getElementById('yourcards');
-var myCards = document.getElementById('mycards');
-var cardContainer = document.getElementById('cardcontainer');
-var specialCard = document.getElementById('specialcard');
-var specialCardViewport = document.getElementById('specialcardviewport');
-var viewportContainer = document.getElementById('viewportcontainer');
-var boxRight = document.getElementById('box-right');
-var viewportTitle = document.getElementById('viewporttitle');
-var viewportBack = document.getElementById('viewportback');
-var yourBoard = document.getElementById('yourboard');
-var myBoard = document.getElementById('myboard');
-var viewportText = document.getElementById('viewporttext');
-var boxLeft = document.getElementById('box-left');
-var ownedCard = document.getElementById('ownedcard');
-var completedComb = document.getElementById('completedcomb');
-var recommendedComb = document.getElementById('recommendedcomb');
-var visited = new Array(TOTAL_NORMAL_CARD).fill(0);
+var visitedNormalCard = new Array(TOTAL_NORMAL_CARD).fill(0);
 var mySpecialCardList = [];
-var specialCardListener = false;
-var checkedListener = false;
-var combCardListener = false;
+var check = false;
 
-normalCardList = [
+var normalCardList = [
     ['2', '风晴雪', ' 青丝银栉别样梳，<br>天付婆娑入画图。'],
     ['2', '方兰生', '嫏嬛久觅紫云乡，<br>半枕清风鹤梦长。'],
     ['2', '阿阮', ' 楚梦沉醉朝复暮，<br>清歌远上巫山低。'],
@@ -117,189 +89,130 @@ normalCardList = [
     ['2', '阿翔', '一团冰雪含奇质，<br>万里云霄豁俊眸。'],
 ]
 
-backBtn.onclick = function () {
+reloadbtn.onclick = function () {
     window.location.reload();
 }
 
-startBtn.onclick = function () {
-    hideFirstPageAndShowSecondPage();
+startbtn.onclick = function () {
+    start();
+}
+
+specialcard.onclick = function () {
+    showOverview();
+    document.getElementById('viewporttext').innerHTML = '我方珍稀牌&nbsp;&gt;&gt;&gt;';
+    var viewportcontainerElement = document.getElementById('viewportcontainer');
+    for (let i = 0; i < viewportcontainerElement.childNodes.length; i++) {
+        viewportcontainerElement.childNodes[i].style.display = 'inline-block';
+    }
+    setRecommendedComb('none');
+}
+
+yourboard.onclick = function () {
+    showOverview();
+    document.getElementById('viewporttext').innerHTML = '对方牌组&nbsp;&gt;&gt;&gt;';
+    document.getElementById('leftbox').style.display = 'block';
+    recommendedcomb.style.display = 'none';
+    var viewportcontainerElement = document.getElementById('viewportcontainer');
+    for (let i = 0; i < viewportcontainerElement.childNodes.length; i++) {
+        viewportcontainerElement.childNodes[i].style.display = 'none';
+    }
+    ownedcard.onclick();
+}
+
+myboard.onclick = function () {
+    showOverview();
+    document.getElementById('viewporttext').innerHTML = '我方牌组&nbsp;&gt;&gt;&gt;';
+    document.getElementById('leftbox').style.display = 'block';
+    recommendedcomb.style.display = 'block';
+    var viewportcontainerElement = document.getElementById('viewportcontainer');
+    for (let i = 0; i < viewportcontainerElement.childNodes.length; i++) {
+        viewportcontainerElement.childNodes[i].style.display = 'none';
+    }
+    ownedcard.onclick();
+}
+
+ownedcard.onclick = function () {
+    if (!check) {
+        ownedcard.innerHTML += '&nbsp;&gt;';
+        check = true;
+    }
+    if (completedcomb.innerHTML.indexOf('&nbsp;&gt;') != -1) {
+        completedcomb.innerHTML = '已完成的组对';
+        this.innerHTML += '&nbsp;&gt;';
+    }
+    else if (recommendedcomb.innerHTML.indexOf('&nbsp;&gt;') != -1) {
+        recommendedcomb.innerHTML = '查看推荐组对';
+        this.innerHTML += '&nbsp;&gt;';
+    }
+    setRecommendedComb('none');
+}
+
+completedcomb.onclick = function () {
+    if (ownedcard.innerHTML.indexOf('&nbsp;&gt;') != -1) {
+        ownedcard.innerHTML = '已拥有的卡牌';
+        this.innerHTML += '&nbsp;&gt;';
+    }
+    else if (recommendedcomb.innerHTML.indexOf('&nbsp;&gt;') != -1) {
+        recommendedcomb.innerHTML = '查看推荐组对';
+        this.innerHTML += '&nbsp;&gt;';
+    }
+    setRecommendedComb('none');
+}
+
+recommendedcomb.onclick = function () {
+    if (ownedcard.innerHTML.indexOf('&nbsp;&gt;') != -1) {
+        ownedcard.innerHTML = '已拥有的卡牌';
+        this.innerHTML += '&nbsp;&gt;';
+    }
+    else if (completedcomb.innerHTML.indexOf('&nbsp;&gt;') != -1) {
+        completedcomb.innerHTML = '已完成的组对';
+        this.innerHTML += '&nbsp;&gt;';
+    }
+    setRecommendedComb('block');
+}
+
+viewportback.onclick = function () {
+    document.getElementById('viewporthead').style.display = 'none';
+    document.getElementById('viewportbody').style.display = 'none';
+    document.getElementById('leftbox').style.display = 'none';
+    init();
+}
+
+function start() {
+    init();
     saveMySpecialCard();
     showMySpecialCard();
-    cardBackTransition(3, 2, poolCards);
-    cardBackTransition(10, 8, yourCards);
-    cardTransition(MIN_POOL_CARDS, 8, poolCards);
-    cardTransition(CARD_FOR_EACH, 8, myCards);
+    listenMySpecialCard();
+    createCardBack(INITIAL_CARDBACK_NUM, INITIAL_CARDBACK_HD, document.getElementById('poolcards'));
+    createNormalCard(MIN_CARD_NUM_IN_POOL, CARD_HD_IN_POOL, document.getElementById('poolcards'));
+    createCardBack(INITIAL_CARD_NUM, INITIAL_CARD_HD, document.getElementById('yourcards'));
+    createNormalCard(INITIAL_CARD_NUM, INITIAL_CARD_HD, document.getElementById('mycards'));
+    createRecommendedComb();
 }
 
-specialCard.onclick = function () {
-    hideSecondPageAndShowThirdPage();
-    viewportText.innerHTML = '我方珍稀牌&nbsp;&gt;&gt;&gt;';
-    if (!specialCardListener) {
-        specialCardListener = true;
-        for (let i = 0; i < mySpecialCardList.length; i++) {
-            var card = document.createElement('div');
-            card.classList.add('scanned');
-            card.style.backgroundImage = 'url(img/' + mySpecialCardList[i] + '.jpg)';
-            viewportContainer.appendChild(card);
+function init() {
+    var previewboxElement = document.getElementById('previewbox');
+    var descriptiontextElements = document.getElementsByClassName('descriptiontext');
+    previewboxElement.style.backgroundImage = '';
+    descriptiontextElements[0].innerHTML = '';
+    descriptiontextElements[1].innerHTML = '';
+    descriptiontextElements[2].innerHTML = '';
 
-            card.onmouseover = function () {
-                previewbox.classList.add('cardcontent');
-                described[0].classList.add('cardcontent');
-                described[1].classList.add('cardcontent');
-                described[2].classList.add('cardcontent');
-
-                previewbox.style.backgroundImage = this.style.backgroundImage;
-
-                described[0].innerHTML = mySpecialCardList[i].split('·')[0] + '&#9733' + ' ' + specialCardList.get(mySpecialCardList[i])[0] + '分' + '<br>' + '<hr>';
-                described[1].innerHTML = mySpecialCardList[i] + '<br>' + specialCardList.get(mySpecialCardList[i])[1] + '<br>';
-                described[2].innerHTML = specialCardList.get(mySpecialCardList[i])[2];
-            }
-
-            card.onmouseout = function () {
-                previewbox.classList.remove('cardcontent');
-                described[0].classList.remove('cardcontent');
-                described[1].classList.remove('cardcontent');
-                described[2].classList.remove('cardcontent');
-                previewbox.style.backgroundImage = '';
-                described[0].innerHTML = '';
-                described[1].innerHTML = '';
-                described[2].innerHTML = '';
-            }
-        }
+    var configuratorElements = document.getElementsByClassName('configurator');
+    for (let i = 0; i < configuratorElements.length; i++) {
+        configuratorElements[i].style.display = 'none';
     }
-    else {
-        for (let i = 0; i < viewportContainer.childNodes.length; i++) {
-            viewportContainer.childNodes[i].style.display = 'inline-block';
-        }
+    var controllerElements = document.getElementsByClassName('controller');
+    for (let i = 0; i < controllerElements.length; i++) {
+        controllerElements[i].style.display = 'block';
     }
-    hideRecommendedComb();
-}
-
-viewportBack.onclick = function () {
-    hideThirdPageAndShowSecondPage();
-}
-
-yourBoard.onclick = function () {
-    hideSecondPageAndShowThirdPage();
-    viewportText.innerHTML = '对方牌组&nbsp;&gt;&gt;&gt;';
-    boxLeft.style.display = 'block';
-    recommendedComb.style.display = 'none';
-    for (let i = 0; i < viewportContainer.childNodes.length; i++) {
-        viewportContainer.childNodes[i].style.display = 'none';
-    }
-    checked();
-    ownedCard.onclick();
-}
-
-myBoard.onclick = function () {
-    hideSecondPageAndShowThirdPage();
-    viewportText.innerHTML = '我方牌组&nbsp;&gt;&gt;&gt;';
-    boxLeft.style.display = 'block';
-    recommendedComb.style.display = 'block';
-    for (let i = 0; i < viewportContainer.childNodes.length; i++) {
-        viewportContainer.childNodes[i].style.display = 'none';
-    }
-    checked();
-    ownedCard.onclick();
-}
-
-ownedCard.onclick = function () {
-    if (completedComb.innerHTML.indexOf('&nbsp;&gt;') != -1) {
-        completedComb.innerHTML = '已完成的组对';
-        this.innerHTML += '&nbsp;&gt;';
-    }
-    else if (recommendedComb.innerHTML.indexOf('&nbsp;&gt;') != -1) {
-        recommendedComb.innerHTML = '查看推荐组对';
-        this.innerHTML += '&nbsp;&gt;';
-    }
-    hideRecommendedComb();
-}
-
-completedComb.onclick = function () {
-    if (ownedCard.innerHTML.indexOf('&nbsp;&gt;') != -1) {
-        ownedCard.innerHTML = '已拥有的卡牌';
-        this.innerHTML += '&nbsp;&gt;';
-    }
-    else if (recommendedComb.innerHTML.indexOf('&nbsp;&gt;') != -1) {
-        recommendedComb.innerHTML = '查看推荐组对';
-        this.innerHTML += '&nbsp;&gt;';
-    }
-    hideRecommendedComb();
-}
-
-recommendedComb.onclick = function () {
-    if (ownedCard.innerHTML.indexOf('&nbsp;&gt;') != -1) {
-        ownedCard.innerHTML = '已拥有的卡牌';
-        this.innerHTML += '&nbsp;&gt;';
-    }
-    else if (completedComb.innerHTML.indexOf('&nbsp;&gt;') != -1) {
-        completedComb.innerHTML = '已完成的组对';
-        this.innerHTML += '&nbsp;&gt;';
-    }
-    if (!combCardListener) {
-        combCardListener = true;
-        createRecommendedComb();
-    }
-    else {
-        showRecommendedComb();
-    }
-}
-
-function checked() {
-    if (!checkedListener) {
-        ownedCard.innerHTML += '&nbsp;&gt;';
-        checkedListener = true;
-    }
-}
-
-function hideRecommendedComb() {
-    for (let i = 0; i < viewportContainer.childNodes.length; i++) {
-        if (viewportContainer.childNodes[i].classList.contains('combpiece')) {
-            viewportContainer.childNodes[i].style.display = 'none';
-        }
-    }
-}
-
-function showRecommendedComb() {
-    for (let i = 0; i < viewportContainer.childNodes.length; i++) {
-        if (viewportContainer.childNodes[i].classList.contains('combpiece')) {
-            viewportContainer.childNodes[i].style.display = 'block';
-        }
-    }
-}
-
-function hideFirstPageAndShowSecondPage() {
-    for (let i = 0; i < configuratorContent.length; i++) {
-        configuratorContent[i].style.display = 'none';
-    }
-    for (let i = 0; i < controllerContent.length; i++) {
-        controllerContent[i].style.display = 'block';
-    }
-}
-
-function hideSecondPageAndShowThirdPage() {
-    for (let i = 0; i < controllerContent.length; i++) {
-        controllerContent[i].style.display = 'none';
-    }
-    specialCardViewport.style.display = 'block';
-    viewportTitle.style.display = 'block';
-    boxRight.style.display = 'block';
-}
-
-function hideThirdPageAndShowSecondPage() {
-    for (let i = 0; i < controllerContent.length; i++) {
-        controllerContent[i].style.display = 'block';
-    }
-    specialCardViewport.style.display = 'none';
-    viewportTitle.style.display = 'none';
-    boxRight.style.display = 'none';
-    boxLeft.style.display = 'none';
 }
 
 function saveMySpecialCard() {
-    for (let i = 0; i < cardContainer.childNodes.length; i++) {
-        if (cardContainer.childNodes[i].classList.contains('scanned')) {
-            var name = cardContainer.childNodes[i].style.backgroundImage.slice(9, -6);
+    var cardcontainerElement = document.getElementById('cardcontainer');
+    for (let i = 0; i < cardcontainerElement.childNodes.length; i++) {
+        if (cardcontainerElement.childNodes[i].classList.contains('scanned')) {
+            var name = cardcontainerElement.childNodes[i].style.backgroundImage.slice(9, -6);
             mySpecialCardList.push(name);
         }
     }
@@ -311,21 +224,51 @@ function showMySpecialCard() {
         card.classList.add('card');
         card.style.backgroundImage = 'url(img/' + mySpecialCardList[i] + '.jpg)';
         card.style.transform = 'rotate(' + getRandom(45) * (i & 1 ? -1 : 1) + 'deg)';
-        specialCard.appendChild(card);
+        specialcard.appendChild(card);
     }
 }
 
-function cardBackTransition(num, base, parent) {
+function listenMySpecialCard() {
+    var previewboxElement = document.getElementById('previewbox');
+    var descriptiontextElements = document.getElementsByClassName('descriptiontext');
+    for (let i = 0; i < mySpecialCardList.length; i++) {
+        var card = document.createElement('div');
+        card.classList.add('scanned');
+        card.style.backgroundImage = 'url(img/' + mySpecialCardList[i] + '.jpg)';
+        var viewportcontainerElement = document.getElementById('viewportcontainer');
+        viewportcontainerElement.appendChild(card);
+
+        card.addEventListener('mouseover', function () {
+            previewboxElement.style.backgroundImage = this.style.backgroundImage;
+            descriptiontextElements[0].innerHTML = mySpecialCardList[i].split('·')[0] + '&#9733' + ' ' + specialCardList.get(mySpecialCardList[i])[0] + '分' + '<br>' + '<hr>';
+            descriptiontextElements[1].innerHTML = mySpecialCardList[i] + '<br>' + specialCardList.get(mySpecialCardList[i])[1] + '<br>';
+            descriptiontextElements[2].innerHTML = specialCardList.get(mySpecialCardList[i])[2];
+            transform(previewboxElement, 'hide', 'show');
+            transform(descriptiontextElements[0], 'hide', 'show');
+            transform(descriptiontextElements[1], 'hide', 'show');
+            transform(descriptiontextElements[2], 'hide', 'show');
+        }, true);
+
+        card.addEventListener('mouseout', function () {
+            transform(previewboxElement, 'show', 'hide');
+            transform(descriptiontextElements[0], 'show', 'hide');
+            transform(descriptiontextElements[1], 'show', 'hide');
+            transform(descriptiontextElements[2], 'show', 'hide');
+        }, true);
+    }
+}
+
+function createCardBack(num, hd, parent) {
     for (let i = 0; i < num; i++) {
         var cardBack = document.createElement('div');
         cardBack.classList.add('card');
         cardBack.style.backgroundImage = 'url(' + 'cardback.jpg' + ')';
-        if (base < 5) {
-            cardBack.style.right = base * i + '%';
+        if (hd == INITIAL_CARDBACK_HD) {
+            cardBack.style.right = hd * i + '%';
             cardBack.style.bottom = i + '%';
         }
-        else {
-            cardBack.style.left = base * i + '%';
+        else if (hd == INITIAL_CARD_HD) {
+            cardBack.style.left = hd * i + '%';
             cardBack.style.bottom = (i & 1) + '%';
         }
         cardBack.style.zIndex = num - i - 1;
@@ -333,26 +276,45 @@ function cardBackTransition(num, base, parent) {
     }
 }
 
-function getRandom(maxn) {
-    return Math.floor(Math.random() * maxn);
-}
-
-function cardTransition(num, base, parent) {
+function createNormalCard(num, hd, parent) {
     var cards = [];
     while (cards.length < num) {
         let index = getRandom(TOTAL_NORMAL_CARD);
-        if (!visited[index]) {
-            visited[index] = true;
+        if (!visitedNormalCard[index]) {
+            visitedNormalCard[index] = true;
             cards.push(index);
         }
     }
     for (let i = 0; i < num; i++) {
         var card = document.createElement('div');
-        card.classList.add('card', 'cardshadow');
+        card.classList.add('card');
         card.style.backgroundImage = 'url(img/' + normalCardList[cards[i]][1] + '.jpg)';
-        card.style.left = base * (i + (num == MIN_POOL_CARDS)) + '%';
+        card.style.left = hd * (i + (hd == CARD_HD_IN_POOL)) + '%';
         card.style.bottom = (i & 1) + '%';
         card.style.zIndex = num - i - 1;
         parent.appendChild(card);
     }
+}
+
+function showOverview() {
+    var controllerElements = document.getElementsByClassName('controller');
+    for (let i = 0; i < controllerElements.length; i++) {
+        controllerElements[i].style.display = 'none';
+    }
+    document.getElementById('viewportbody').style.display = 'block';
+    document.getElementById('viewporthead').style.display = 'block';
+    document.getElementById('rightbox').style.display = 'block';
+}
+
+function setRecommendedComb(display) {
+    var viewportcontainerElement = document.getElementById('viewportcontainer');
+    for (let i = 0; i < viewportcontainerElement.childNodes.length; i++) {
+        if (viewportcontainerElement.childNodes[i].classList.contains('combpiece')) {
+            viewportcontainerElement.childNodes[i].style.display = display;
+        }
+    }
+}
+
+function getRandom(maxn) {
+    return Math.floor(Math.random() * maxn);
 }
