@@ -127,13 +127,13 @@ var combList = new Map([
     [['天鹿', '昭明', '古剑焚寂', '古剑红玉', '太岁', '无名之剑', '古剑晗光'], ['80', '古剑奇谭']]
 ]);
 
-
 function createRecommendedComb() {
-    viewportContainer.style.overflowY = 'scroll';
+    var viewportcontainerElement = document.getElementById('viewportcontainer');
+    viewportcontainerElement.style.overflowY = 'scroll';
     for (let [key, value] of combList.entries()) {
         var comb = document.createElement('div');
         comb.classList.add('combpiece');
-        viewportContainer.appendChild(comb);
+        viewportcontainerElement.appendChild(comb);
         for (let i = 0; i < key.length; i++) {
             var combCard = document.createElement('div');
             combCard.classList.add('combcard');
@@ -148,7 +148,7 @@ function createRecommendedComb() {
         var hr = document.createElement('hr');
         combName.appendChild(hr);
         comb.appendChild(combName);
-        let content = '';
+        var content = '';
         for (let i = 0; i < key.length; i++) {
             var combContent = document.createElement('div');
             combContent.classList.add('combcontent');
