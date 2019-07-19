@@ -1,6 +1,13 @@
-CEILING = 15;
-TOTAL_SPECIAL_CARD = 44;
-var described = document.getElementsByClassName('descriptiontext');
+const CEILING = 15;
+const TOTAL_SPECIAL_CARD = 44;
+const TOTAL_NORMAL_CARD = 84;
+const INITIAL_CARDBACK_NUM = 3;
+const INITIAL_CARDBACK_HD = 2;
+const INITIAL_CARD_NUM = 10;
+const INITIAL_CARD_HD = 8;
+const MIN_CARD_NUM_IN_POOL = 8;
+const MAX_CARD_NUM_IN_POOL = 10;
+const CARD_HD_IN_POOL = 7;
 
 var specialCardList = new Map(
     [
@@ -51,48 +58,52 @@ var specialCardList = new Map(
     ]);
 
 window.onload = function () {
-    var selected = document.getElementsByClassName('selected');
-    var counting = document.getElementById('ceilingcount');
+    createBlankElement();
+    listenSpecialCard();
+}
 
-    var isCeiling = function () {
-        return counting.innerHTML == CEILING;
-    }
-
+function createBlankElement() {
     for (let i = 0; i < CEILING; i++) {
-        var selectedCard = document.createElement('div');
-        selectedCard.classList.add('selected');
-        cardcontainer.appendChild(selectedCard);
+        var blankElement = document.createElement('div');
+        blankElement.classList.add('blank');
+        cardcontainer.appendChild(blankElement);
     }
+}
 
+function listenSpecialCard() {
+    var previewboxElement = document.getElementById('previewbox');
+    var descriptiontextElements = document.getElementsByClassName('descriptiontext');
+    var blankElements = document.getElementsByClassName('blank');
+    var countElement = document.getElementsByTagName('span')[0];
+    function isCeiling() {
+        return countElement.innerHTML == CEILING;
+    }
     for (let [key, value] of specialCardList.entries()) {
         var card = document.createElement('div');
         card.style.backgroundImage = 'url(' + "img/" + key + ".jpg" + ')';
         card.classList.add('scanned');
         cardrepository.appendChild(card);
 
-        card.onmouseover = function () {
-            previewbox.classList.add('cardcontent');
-            described[0].classList.add('cardcontent');
-            described[1].classList.add('cardcontent');
-            described[2].classList.add('cardcontent');
-            previewbox.style.backgroundImage = this.style.backgroundImage;
-            described[0].innerHTML = key.split('·')[0] + '&#9733' + ' ' + value[0] + '分' + '<br>' + '<hr>';
-            described[1].innerHTML = key + '<br>' + value[1] + '<br>';
-            described[2].innerHTML = value[2];
-        }
+        card.addEventListener('mouseover', function () {
+            previewboxElement.style.backgroundImage = this.style.backgroundImage;
+            descriptiontextElements[0].innerHTML = key.split('·')[0] + '&#9733' + ' ' + value[0] + '分' + '<br>' + '<hr>';
+            descriptiontextElements[1].innerHTML = key + '<br>' + value[1] + '<br>';
+            descriptiontextElements[2].innerHTML = value[2];
+            transform(previewboxElement, 'hide', 'show');
+            transform(descriptiontextElements[0], 'hide', 'show');
+            transform(descriptiontextElements[1], 'hide', 'show');
+            transform(descriptiontextElements[2], 'hide', 'show');
+        }, true);
 
-        card.onmouseout = function () {
-            previewbox.classList.remove('cardcontent');
-            described[0].classList.remove('cardcontent');
-            described[1].classList.remove('cardcontent');
-            described[2].classList.remove('cardcontent');
-            previewbox.style.backgroundImage = '';
-            described[0].innerHTML = '';
-            described[1].innerHTML = '';
-            described[2].innerHTML = '';
-        }
+        card.addEventListener('mouseout', function () {
+            transform(previewboxElement, 'show', 'hide');
+            transform(descriptiontextElements[0], 'show', 'hide');
+            transform(descriptiontextElements[1], 'show', 'hide');
+            transform(descriptiontextElements[2], 'show', 'hide');
+        }, true);
 
-        card.onclick = function () {
+        card.addEventListener('click', function () {
+            var selectedCardName = this.style.backgroundImage.slice(9, -6).split('·')[0];
             if (this.parentElement.id == 'cardrepository') {
                 if (isCeiling())
                     return;
@@ -100,16 +111,14 @@ window.onload = function () {
                     if (this.childNodes.length > 0)
                         return;
                     cardrepository.removeChild(this);
-                    cardcontainer.replaceChild(this, selected[0]);
-
-                    let thisName = this.style.backgroundImage.slice(9, -6);
+                    cardcontainer.replaceChild(this, blankElements[0]);
                     for (let i = 0; i < cardrepository.childNodes.length; i++) {
-                        let name = cardrepository.childNodes[i].style.backgroundImage.slice(9, -6);
-                        if (thisName.split('·')[0] == name.split('·')[0]) {
+                        var repositoryCardName = cardrepository.childNodes[i].style.backgroundImage.slice(9, -6).split('·')[0];
+                        if (selectedCardName == repositoryCardName) {
                             var ban = document.createElement('div');
+                            ban.innerHTML = '已存在<br>相同人物';
                             ban.classList.add('banned');
                             cardrepository.childNodes[i].classList.add('shadow');
-                            ban.innerHTML = '已存在<br>相同人物';
                             cardrepository.childNodes[i].appendChild(ban);
                             break;
                         }
@@ -117,24 +126,27 @@ window.onload = function () {
                 }
             }
             else if (this.parentElement.id == 'cardcontainer') {
-                let thisName = this.style.backgroundImage.slice(9, -6);
                 for (let i = 0; i < cardrepository.childNodes.length; i++) {
-                    let name = cardrepository.childNodes[i].style.backgroundImage.slice(9, -6);
-                    if (thisName.split('·')[0] == name.split('·')[0]) {
+                    var repositoryCardName = cardrepository.childNodes[i].style.backgroundImage.slice(9, -6).split('·')[0];
+                    if (selectedCardName == repositoryCardName) {
                         cardrepository.childNodes[i].removeChild(cardrepository.childNodes[i].childNodes[0]);
                         cardrepository.childNodes[i].classList.remove('shadow');
                         break;
                     }
                 }
-
                 cardcontainer.removeChild(this);
-                var selectedCard = document.createElement('div');
-                selectedCard.classList.add('selected');
-                cardcontainer.appendChild(selectedCard, this);
                 cardrepository.appendChild(this);
+                var blankElement = document.createElement('div');
+                blankElement.classList.add('blank');
+                cardcontainer.appendChild(blankElement);
             }
-            counting.innerHTML = TOTAL_SPECIAL_CARD - cardrepository.childNodes.length;
-            counting.style.color = isCeiling() ? 'rgb(255, 0, 0)' : 'rgb(145, 145, 120)';
-        }
+            countElement.innerHTML = TOTAL_SPECIAL_CARD - cardrepository.childNodes.length;
+            countElement.style.color = isCeiling() ? 'rgb(255, 0, 0)' : 'rgb(145, 145, 120)';
+        }, true);
     }
+}
+
+function transform(element, classA, classB) {
+    element.classList.remove(classA);
+    element.classList.add(classB);
 }
