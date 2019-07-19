@@ -65,11 +65,8 @@
     from {
         box-shadow: 0 0 10px var(--card-border-color);
     }
-    50% {
-        box-shadow: 0 0 15px var(--card-border-color);
-    }
     to {
-        box-shadow: 0 0 10px var(--card-border-color);
+        box-shadow: 0 0 15px var(--card-border-color);
     }
 }
 
@@ -77,7 +74,7 @@
     animation: cardluminous 400ms linear forwards;
 }
 
-@keyframes fading {
+@keyframes fadein {
     from {
         opacity: 0;
     }
@@ -86,6 +83,19 @@
     }
 }
 
-.cardcontent {
-    animation: fading 1000ms linear forwards;
+@keyframes fadeout {
+    from {
+        opacity: 100%;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.show {
+    animation: fadein 600ms linear forwards;
+}
+
+.hide {
+    animation: fadeout 600ms linear forwards;
 }
