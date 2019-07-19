@@ -10,40 +10,41 @@
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <link rel="stylesheet" type="text/css" href="css/reporter.css">
     <link rel="stylesheet" type="text/css" href="css/decoration.css">
+    <link rel="stylesheet" type="text/css" href="css/print.css">
 </head>
 
 <body>
     <div class="wrapper">
-        <div id="box-right" class="configurator">
+        <div class="configurator" id="rightbox">
             <div id="cardpreview">
                 <div id="previewbox"></div>
             </div>
-            <div id="carddescription">
-                <div id="descriptionbox">
-                    <div class="descriptiontext" id="partone"></div>
-                    <div class="descriptiontext" id="parttwo"></div>
-                    <div class="descriptiontext" id="partthree"></div>
-                </div>
+            <div id="descriptionbox">
+                <div class="descriptiontext" id="cardname"></div>
+                <div class="descriptiontext" id="cardpoem"></div>
+                <div class="descriptiontext" id="cardskill"></div>
             </div>
         </div>
-        <div id="box-top" class="configurator">
+        <div class="configurator" id="topbox">
             <div class="notice">
-                <div class="specialcardrepo">【珍稀牌库】</div>
+                <div class="specialcard">【珍稀牌库】</div>
             </div>
             <div id="cardrepository"></div>
         </div>
-        <div id="box-bottom" class="configurator">
+        <div class="configurator" id="bottombox">
             <div class="notice">
-                <div class="specialcardselected">【珍稀牌组】</div>
+                <div class="specialcard">【珍稀牌组】</div>
                 <div class="ceiling">上限
-                    <span id="ceilingcount">0</span>/15
+                    <span>0</span>/15
                 </div>
             </div>
             <div id="cardcontainer"></div>
         </div>
-        <button class="btn configurator" id="backbtn">放弃牌局</button>
-        <button class="btn configurator" id="startbtn">开始一局</button>
-        <div id="scoreboard" class="controller">
+        <div class="configurator" id="foot">
+            <button class='btn' id="reloadbtn">放弃牌局</button>
+            <button class='btn' id="startbtn">开始一局</button>
+        </div>
+        <div class="controller" id="scoreboard">
             <div id="yourboard"></div>
             <div class="boardtext" id="yourtext">&nbsp;&nbsp;对方得分
                 <div class="score">0</div>
@@ -53,7 +54,7 @@
             </div>
             <div id="myboard"></div>
         </div>
-        <div id="table" class="controller">
+        <div class="controller" id="table">
             <div id="yourcontainer">
                 <div id="yourcards"></div>
             </div>
@@ -64,19 +65,19 @@
                 <div id="mycards"></div>
             </div>
         </div>
-        <div id="specialboard" class="controller">
-            <div class="samplecard"></div>
-            <div class="infobox"></div>
+        <div class="controller" id="specialboard">
+            <div id="samplecard"></div>
+            <div id="infobox"></div>
             <div id="specialcard"></div>
         </div>
-        <div id="viewporttitle">
+        <div id="viewporthead">
             <div id="viewporttext"></div>
             <div id="viewportback">返回牌局</div>
         </div>
-        <div id="specialcardviewport">
+        <div id="viewportbody">
             <div id="viewportcontainer"></div>
         </div>
-        <div id="box-left">
+        <div id="leftbox">
             <div class="boardtext" id="ownedcard">已拥有的卡牌</div>
             <div class="boardtext" id="completedcomb">已完成的组对</div>
             <div class="boardtext" id="recommendedcomb">查看推荐组对</div>
