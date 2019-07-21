@@ -190,7 +190,7 @@ hr {
     color: var(--text-color1);
 }
 
-#cardname {
+#cardname, #infotitle {
     height: 10%;
     width: 100%;
     line-height: 1.5;
@@ -200,7 +200,7 @@ hr {
     position: absolute;
 }
 
-#cardpoem {
+#cardpoem, #infobody {
     height: 40%;
     width: 80%;
     line-height: 2;
