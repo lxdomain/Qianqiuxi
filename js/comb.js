@@ -1,3 +1,5 @@
+var recommendedCardList = new Map();
+
 var combList = new Map([
     [['风晴雪', '百里屠苏'], ['3', '与子成说']],
     [['百里屠苏', '悭臾'], ['3', '乘龙归']],
@@ -156,5 +158,21 @@ function createRecommendedComb() {
         }
         combContent.innerHTML = content;
         comb.appendChild(combContent);
+    }
+}
+
+function createRecommendedCard() {
+    for (let key of normalCardList.keys()) {
+        var value = [];
+        for (let list of combList.keys()) {
+            if (list.indexOf(key) != -1) {
+                for (let i = 0; i < list.length; i++) {
+                    if (value.indexOf(list[i]) == -1) {
+                        value.push(list[i]);
+                    }
+                }
+            }
+        }
+        recommendedCardList.set(key, value);
     }
 }
