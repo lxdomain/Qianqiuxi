@@ -86,7 +86,7 @@ function listenSpecialCard() {
 
         card.addEventListener('mouseover', function () {
             previewboxElement.style.backgroundImage = this.style.backgroundImage;
-            descriptiontextElements[0].innerHTML = key.split('·')[0] + '&#9733' + ' ' + value[0] + '分' + '<br>' + '<hr>';
+            descriptiontextElements[0].innerHTML = key.split('·')[0] + '&#9733' + '&nbsp;' + value[0] + '分' + '<br>' + '<hr>';
             descriptiontextElements[1].innerHTML = key + '<br>' + value[1] + '<br>';
             descriptiontextElements[2].innerHTML = value[2];
             transform(previewboxElement, 'hide', 'show');
