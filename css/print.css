@@ -45,7 +45,7 @@
 }
 
 .cardshadow {
-    box-shadow: 1px 1px 5px var(--card-border-color);
+    box-shadow: 0 0 15px var(--card-border-color);
 }
 
 .combpiece {
@@ -67,7 +67,6 @@
 
 .combname {
     height: 50%;
-    ;
     width: 30%;
     font-size: 2em;
     line-height: 2;
