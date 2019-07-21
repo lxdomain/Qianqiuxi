@@ -334,8 +334,6 @@ function listenNormalCard() {
             element.childNodes[j].addEventListener('mouseout', function () {
                 transform(infotitleElement, 'show', 'hide');
                 transform(infobodyElement, 'show', 'hide');
-                infotitleElement.innerHTML = '';
-                infobodyElement.innerHTML = '';
             }, true)
         }
     }
@@ -377,6 +375,8 @@ function showOverview() {
     for (let i = 0; i < controllerElements.length; i++) {
         controllerElements[i].style.display = 'none';
     }
+    document.getElementById('infotitle').innerHTML = '';
+    document.getElementById('infobody').innerHTML = '';
     document.getElementById('viewportbody').style.display = 'block';
     document.getElementById('viewporthead').style.display = 'block';
     document.getElementById('rightbox').style.display = 'block';
