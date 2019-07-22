@@ -323,9 +323,13 @@ function listenNormalCard() {
             element.childNodes[j].addEventListener('mouseover', function () {
                 infotitleElement.innerHTML = cardName + '&nbsp;&nbsp;&nbsp;&nbsp;' + '2分' + '<hr>';
                 infobodyElement.innerHTML = '<br>' + '可形成组合的卡牌：' + '<br>';
-                for (let i = 0; i < recommendedCardList.get(cardName).length; i++) {
-                    if (recommendedCardList.get(cardName)[i] != cardName) {
-                        infobodyElement.innerHTML += recommendedCardList.get(cardName)[i] + (i == recommendedCardList.get(cardName).length - 1 ? '' : '、');
+                var value = recommendedCardList.get(cardName);
+                for (let i = 0; i < value.length; i++) {
+                    if (value[i] != cardName) {
+                        infobodyElement.innerHTML += value[i];
+                        if(i != value.length - 1&&value[value.length-1]!=cardName){
+                            infobodyElement.innerHTML += '、';
+                        }
                     }
                 }
                 transform(infotitleElement, 'hide', 'show');
