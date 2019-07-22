@@ -322,16 +322,14 @@ function listenNormalCard() {
             let cardName = element.childNodes[j].style.backgroundImage.slice(9, -6);
             element.childNodes[j].addEventListener('mouseover', function () {
                 infotitleElement.innerHTML = cardName + '&nbsp;&nbsp;&nbsp;&nbsp;' + '2分' + '<hr>';
-                infobodyElement.innerHTML = '<br>' + '可形成组合的卡牌：' + '<br>';
-                var value = recommendedCardList.get(cardName);
-                for (let i = 0; i < value.length; i++) {
-                    if (value[i] != cardName) {
-                        infobodyElement.innerHTML += value[i];
-                        if(i != value.length - 1&&value[value.length-1]!=cardName){
-                            infobodyElement.innerHTML += '、';
-                        }
+                var str = '<br>' + '可形成组合的卡牌：' + '<br>';
+                for (let i = 0; i < recommendedCardList.get(cardName).length; i++) {
+                    if (recommendedCardList.get(cardName)[i] != cardName) {
+                        str += recommendedCardList.get(cardName)[i]+'、';
                     }
                 }
+                str = str.substring(0,str.length-1);
+                infobodyElement.innerHTML = str;
                 transform(infotitleElement, 'hide', 'show');
                 transform(infobodyElement, 'hide', 'show');
             }, true)
