@@ -388,7 +388,7 @@ function bindMyCard() {
             mycardsElement.childNodes[i].onclick = function () {
                 if (poolcardsElement.childNodes.length >= MAX_CARD_NUM_IN_POOL + INITIAL_CARDBACK_NUM) {
                     while (poolcardsElement.childNodes.length > INITIAL_CARDBACK_NUM) {
-                        let name = poolCardList.lastChild.style.backgroundImage.slice(9, -6);
+                        let name = poolcardsElement.lastChild.style.backgroundImage.slice(9, -6);
                         for (let j = 0; j < visitedNormalCardList.length; j++) {
                             if (visitedNormalCardList[j][0] == name) {
                                 visitedNormalCardList[j][1] = false;
