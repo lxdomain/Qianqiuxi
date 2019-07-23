@@ -8,6 +8,7 @@ const INITIAL_CARD_HD = 8;
 const MIN_CARD_NUM_IN_POOL = 8;
 const MAX_CARD_NUM_IN_POOL = 10;
 const CARD_HD_IN_POOL = 7;
+const ZINDEX_BASE = 99;
 
 var specialCardList = new Map(
     [
