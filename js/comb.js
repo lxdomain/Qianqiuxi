@@ -161,6 +161,15 @@ function createRecommendedComb() {
     }
 }
 
+function setRecommendedComb(display) {
+    var viewportcontainerElement = document.getElementById('viewportcontainer');
+    for (let i = 0; i < viewportcontainerElement.childNodes.length; i++) {
+        if (viewportcontainerElement.childNodes[i].classList.contains('combpiece')) {
+            viewportcontainerElement.childNodes[i].style.display = display;
+        }
+    }
+}
+
 function createRecommendedCard() {
     for (let key of normalCardList.keys()) {
         var value = [];
