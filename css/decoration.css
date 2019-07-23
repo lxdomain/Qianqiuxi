@@ -30,6 +30,14 @@
     transform: rotate(-9deg);
 }
 
+#poolcontainer>#poolcards div:nth-child(12) {
+    transform: rotate(-6deg);
+}
+
+#poolcontainer>#poolcards div:nth-child(13) {
+    transform: rotate(5deg);
+}
+
 #poolcontainer>#poolcards div:nth-child(n+4) {
     transition: all 400ms;
 }
