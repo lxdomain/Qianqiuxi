@@ -2,7 +2,9 @@ var visitedNormalCardList = [];
 var poolCardList = [];
 var myNormalCardList = [];
 var mySpecialCardList = [];
-var check = false;
+var myOwnedCardList = [];
+var myCompletedCombList = new Map();
+var myCurrentScore = 0;
 
 var normalCardList = new Map(
     [
@@ -102,12 +104,12 @@ startbtn.onclick = function () {
 
 specialcard.onclick = function () {
     showOverview();
+    reflowMySpecialCard();
     document.getElementById('viewporttext').innerHTML = '我方珍稀牌&nbsp;&gt;&gt;&gt;';
     var viewportcontainerElement = document.getElementById('viewportcontainer');
     for (let i = 0; i < viewportcontainerElement.childNodes.length; i++) {
         viewportcontainerElement.childNodes[i].style.display = 'inline-block';
     }
-    setRecommendedComb('none');
 }
 
 yourboard.onclick = function () {
@@ -135,43 +137,18 @@ myboard.onclick = function () {
 }
 
 ownedcard.onclick = function () {
-    if (!check) {
-        ownedcard.innerHTML += '&nbsp;&gt;';
-        check = true;
-    }
-    if (completedcomb.innerHTML.indexOf('&nbsp;&gt;') != -1) {
-        completedcomb.innerHTML = '已完成的组对';
-        this.innerHTML += '&nbsp;&gt;';
-    }
-    else if (recommendedcomb.innerHTML.indexOf('&nbsp;&gt;') != -1) {
-        recommendedcomb.innerHTML = '查看推荐组对';
-        this.innerHTML += '&nbsp;&gt;';
-    }
-    setRecommendedComb('none');
+    check(ownedcard);
+    reflow();
 }
 
 completedcomb.onclick = function () {
-    if (ownedcard.innerHTML.indexOf('&nbsp;&gt;') != -1) {
-        ownedcard.innerHTML = '已拥有的卡牌';
-        this.innerHTML += '&nbsp;&gt;';
-    }
-    else if (recommendedcomb.innerHTML.indexOf('&nbsp;&gt;') != -1) {
-        recommendedcomb.innerHTML = '查看推荐组对';
-        this.innerHTML += '&nbsp;&gt;';
-    }
-    setRecommendedComb('none');
+    check(completedcomb);
+    reflow();
 }
 
 recommendedcomb.onclick = function () {
-    if (ownedcard.innerHTML.indexOf('&nbsp;&gt;') != -1) {
-        ownedcard.innerHTML = '已拥有的卡牌';
-        this.innerHTML += '&nbsp;&gt;';
-    }
-    else if (completedcomb.innerHTML.indexOf('&nbsp;&gt;') != -1) {
-        completedcomb.innerHTML = '已完成的组对';
-        this.innerHTML += '&nbsp;&gt;';
-    }
-    setRecommendedComb('block');
+    check(recommendedcomb);
+    reflow();
 }
 
 viewportback.onclick = function () {
@@ -181,13 +158,40 @@ viewportback.onclick = function () {
     initStage();
 }
 
+function check(element) {
+    ownedcard.innerHTML = '已拥有的卡牌';
+    completedcomb.innerHTML = '已完成的组对';
+    recommendedcomb.innerHTML = '查看推荐组对';
+    element.innerHTML += '&nbsp;&gt;';
+}
+
+function reflow() {
+    if (leftbox.style.display == 'block') {
+        if (viewporttext.innerHTML.indexOf('我方牌组') != -1) {
+            if (ownedcard.innerHTML.indexOf('&gt;') != -1) {
+                reflowMyOwnedCard();
+            }
+            else if (completedcomb.innerHTML.indexOf('&gt;') != -1) {
+                reflowMyCompletedComb();
+            }
+            else if (recommendedcomb.innerHTML.indexOf('&gt;') != -1) {
+                reflowRecommendedComb(combList);
+            }
+        }
+        else if (viewporttext.innerHTML.indexOf('对方牌组') != -1) {
+            clearViewportContainer();
+        }
+    }
+    else {
+        reflowMySpecialCard();
+    }
+}
+
 function start() {
     initStage();
     initVisitedNormalCard();
     saveMySpecialCard();
     showMySpecialCard();
-    listenMySpecialCard();
-    createRecommendedComb();
     createRecommendedCard();
 
     var poolcardsElement = document.getElementById('poolcards');
@@ -254,7 +258,8 @@ function showMySpecialCard() {
 }
 
 //Listen selected special cards on second stage.
-function listenMySpecialCard() {
+function reflowMySpecialCard() {
+    clearViewportContainer();
     var previewboxElement = document.getElementById('previewbox');
     var descriptiontextElements = document.getElementsByClassName('descriptiontext');
     for (let i = 0; i < mySpecialCardList.length; i++) {
@@ -281,6 +286,30 @@ function listenMySpecialCard() {
             transform(descriptiontextElements[1], 'show', 'hide');
             transform(descriptiontextElements[2], 'show', 'hide');
         }, true);
+    }
+}
+
+function reflowMyOwnedCard() {
+    clearViewportContainer();
+    var viewportcontainerElement = document.getElementById('viewportcontainer');
+    var myboardElement = document.getElementById('myboard');
+    for (let i = 0; i < myboardElement.childNodes.length; i++) {
+        var card = document.createElement('div');
+        card.style.backgroundImage = myboardElement.childNodes[i].style.backgroundImage;
+        card.classList.add('scanned');
+        viewportcontainerElement.appendChild(card);
+    }
+    listenMyOwnedlCard(viewportcontainerElement);
+}
+
+function reflowMyCompletedComb() {
+    reflowRecommendedComb(myCompletedCombList);
+}
+
+function clearViewportContainer() {
+    var viewportcontainerElement = document.getElementById('viewportcontainer');
+    while (viewportcontainerElement.hasChildNodes()) {
+        viewportcontainerElement.removeChild(viewportcontainerElement.lastChild);
     }
 }
 
@@ -352,6 +381,37 @@ function listenNormalCard(element, st = 0) {
     }
 }
 
+function listenMyOwnedlCard(element) {
+    var previewboxElement = document.getElementById('previewbox');
+    var descriptiontextElements = document.getElementsByClassName('descriptiontext');
+    for (let j = 0; j < element.childNodes.length; j++) {
+        let cardName = element.childNodes[j].style.backgroundImage.slice(9, -6);
+        element.childNodes[j].onmouseover = () => {
+            previewboxElement.style.backgroundImage = element.childNodes[j].style.backgroundImage;
+            descriptiontextElements[0].innerHTML = cardName + '&nbsp;&nbsp;&nbsp;&nbsp;' + '2分' + '<hr>';
+            descriptiontextElements[1].innerHTML = normalCardList.get(cardName)[1];
+            var str = '可形成组合的卡牌：' + '<br>';
+            for (let i = 0; i < recommendedCardList.get(cardName).length; i++) {
+                if (recommendedCardList.get(cardName)[i] != cardName) {
+                    str += recommendedCardList.get(cardName)[i] + '、';
+                }
+            }
+            str = str.substring(0, str.length - 1);
+            descriptiontextElements[2].innerHTML = str;
+            transform(previewboxElement, 'hide', 'show');
+            transform(descriptiontextElements[0], 'hide', 'show');
+            transform(descriptiontextElements[1], 'hide', 'show');
+            transform(descriptiontextElements[2], 'hide', 'show');
+        }
+        element.childNodes[j].onmouseout = () => {
+            transform(previewboxElement, 'show', 'hide');
+            transform(descriptiontextElements[0], 'show', 'hide');
+            transform(descriptiontextElements[1], 'show', 'hide');
+            transform(descriptiontextElements[2], 'show', 'hide');
+        }
+    }
+}
+
 //Cards of the same season will be luminous.
 //Do not use EventListener on this recursive function!
 function bindMyCard() {
@@ -373,9 +433,9 @@ function bindMyCard() {
                             return;
                     }
                 }
-                mycardsElement.childNodes[i].style.top = '-30%';
-                mycardsElement.childNodes[i].classList.add('cardshadow');
-                var myCardName = mycardsElement.childNodes[i].style.backgroundImage.slice(9, -6);
+                mycardsElement.childNodes[i] && (mycardsElement.childNodes[i].style.top = '-30%');
+                mycardsElement.childNodes[i] && (mycardsElement.childNodes[i].classList.add('cardshadow'));
+                mycardsElement.childNodes[i] && (myCardName = mycardsElement.childNodes[i].style.backgroundImage.slice(9, -6));
                 for (let j = INITIAL_CARDBACK_NUM; j < poolcardsElement.childNodes.length; j++) {
                     var poolCardName = poolcardsElement.childNodes[j].style.backgroundImage.slice(9, -6);
                     if (normalCardList.get(myCardName)[2] == normalCardList.get(poolCardName)[2]) {
@@ -450,6 +510,8 @@ function bindPoolCard(st) {
                 for (let j = 0; j < mycardsElement.childNodes.length; j++) {
                     if (mycardsElement.childNodes[j].classList.contains('cardshadow')) {
                         mycardsElement.childNodes[j].classList.remove('cardshadow');
+                        myOwnedCardList.push(this.style.backgroundImage.slice(9, -6));
+                        myOwnedCardList.push(mycardsElement.childNodes[j].style.backgroundImage.slice(9, -6));
                         transfer([this, mycardsElement.childNodes[j]]);
                         reflowPoolCards();
                         reflowNormalCards(mycardsElement.childNodes);
@@ -462,7 +524,8 @@ function bindPoolCard(st) {
                         poolcardsElement.childNodes[k].classList.remove('cardshadow');
                     }
                 }
-
+                checkComb();
+                setScore(myscore, myCurrentScore);
             }
         }, true)
     }
