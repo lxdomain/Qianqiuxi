@@ -178,12 +178,17 @@ function createRecommendedCard() {
     }
 }
 
-function checkComb() {
-    myCurrentScore += 4;
+function checkComb(ownedCardList) {
+    if (ownedCardList == myOwnedCardList) {
+        myCurrentScore += 4;
+    }
+    else {
+        yourCurrentScore += 4;
+    }
     for (let [key, value] of combList.entries()) {
         let check = true;
         for (let i = 0; i < key.length; i++) {
-            if (myOwnedCardList.indexOf(key[i]) == -1) {
+            if (ownedCardList.indexOf(key[i]) == -1) {
                 check = false;
                 break;
             }
@@ -191,11 +196,21 @@ function checkComb() {
         if (check) {
             if (!value[2]) {
                 value[2] = true;
-                myCurrentScore += parseInt(value[0]);
-                myCompletedCombList.set(key, value);
+                if (ownedCardList == myOwnedCardList) {
+                    myCurrentScore += parseInt(value[0]);
+                    myCompletedCombList.set(key, value);
+                    console.log('~我方 完成组对[' + value[1] + ']' + ' 获得额外分值' + value[0] + '分');
+
+                }
+                else {
+                    yourCurrentScore += parseInt(value[0]);
+                    yourCompletedCombList.set(key, value);
+                    console.log('~对方 完成组对[' + value[1] + ']' + ' 获得额外分值' + value[0] + '分');
+                }
             }
         }
     }
+    console.log('');
 }
 
 function setScore(element, currentScore) {
