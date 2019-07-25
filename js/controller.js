@@ -1,4 +1,9 @@
 var visitedNormalCardList = [];
+var yourNormalCardList = [];
+var yourSpecialCardList = [];
+var yourOwnedCardList = [];
+var yourCompletedCombList = new Map();
+var yourCurrentScore = 0;
 var poolCardList = [];
 var myNormalCardList = [];
 var mySpecialCardList = [];
@@ -169,17 +174,22 @@ function reflow() {
     if (leftbox.style.display == 'block') {
         if (viewporttext.innerHTML.indexOf('我方牌组') != -1) {
             if (ownedcard.innerHTML.indexOf('&gt;') != -1) {
-                reflowMyOwnedCard();
+                reflowOwnedCard(myOwnedCardList);
             }
             else if (completedcomb.innerHTML.indexOf('&gt;') != -1) {
-                reflowMyCompletedComb();
+                reflowCompletedComb(myCompletedCombList);
             }
             else if (recommendedcomb.innerHTML.indexOf('&gt;') != -1) {
                 reflowRecommendedComb(combList);
             }
         }
         else if (viewporttext.innerHTML.indexOf('对方牌组') != -1) {
-            clearViewportContainer();
+            if (ownedcard.innerHTML.indexOf('&gt;') != -1) {
+                reflowOwnedCard(yourOwnedCardList);
+            }
+            else if (completedcomb.innerHTML.indexOf('&gt;') != -1) {
+                reflowCompletedComb(yourCompletedCombList);
+            }
         }
     }
     else {
@@ -198,6 +208,7 @@ function start() {
     var yourcardsElement = document.getElementById('yourcards');
     var mycardsElement = document.getElementById('mycards');
     createCardBack(INITIAL_CARD_NUM, INITIAL_CARD_HD, yourcardsElement);
+    yourNormalCardList = createNormalCard(INITIAL_CARD_NUM);
 
     createCardBack(INITIAL_CARDBACK_NUM, INITIAL_CARDBACK_HD, poolcardsElement);
     poolCardList = createNormalCard(MIN_CARD_NUM_IN_POOL, CARD_HD_IN_POOL, poolcardsElement);
@@ -289,21 +300,20 @@ function reflowMySpecialCard() {
     }
 }
 
-function reflowMyOwnedCard() {
+function reflowOwnedCard(ownedcardList) {
     clearViewportContainer();
     var viewportcontainerElement = document.getElementById('viewportcontainer');
-    var myboardElement = document.getElementById('myboard');
-    for (let i = 0; i < myboardElement.childNodes.length; i++) {
+    for (let i = 0; i < ownedcardList.length; i++) {
         var card = document.createElement('div');
-        card.style.backgroundImage = myboardElement.childNodes[i].style.backgroundImage;
+        card.style.backgroundImage = 'url(img/' + ownedcardList[i] + '.jpg)';
         card.classList.add('scanned');
         viewportcontainerElement.appendChild(card);
     }
     listenMyOwnedlCard(viewportcontainerElement);
 }
 
-function reflowMyCompletedComb() {
-    reflowRecommendedComb(myCompletedCombList);
+function reflowCompletedComb(completedCombList) {
+    reflowRecommendedComb(completedCombList);
 }
 
 function clearViewportContainer() {
@@ -342,14 +352,16 @@ function createNormalCard(num, hd, parent) {
             cards.push(visitedNormalCardList[index][0]);
         }
     }
-    for (let i = 0; i < num; i++) {
-        var card = document.createElement('div');
-        card.classList.add('card');
-        card.style.backgroundImage = 'url(img/' + cards[i] + '.jpg)';
-        card.style.left = hd * (i + (hd == CARD_HD_IN_POOL)) + '%';
-        card.style.bottom = (i & 1) + '%';
-        card.style.zIndex = num - i - 1 + ZINDEX_BASE;
-        parent.appendChild(card);
+    if (hd != undefined && parent != undefined) {
+        for (let i = 0; i < num; i++) {
+            var card = document.createElement('div');
+            card.classList.add('card');
+            card.style.backgroundImage = 'url(img/' + cards[i] + '.jpg)';
+            card.style.left = hd * (i + (hd == CARD_HD_IN_POOL)) + '%';
+            card.style.bottom = (i & 1) + '%';
+            card.style.zIndex = num - i - 1 + ZINDEX_BASE;
+            parent.appendChild(card);
+        }
     }
     return cards;
 }
@@ -447,19 +459,7 @@ function bindMyCard() {
         else {
             mycardsElement.childNodes[i].onclick = function () {
                 if (poolcardsElement.childNodes.length >= MAX_CARD_NUM_IN_POOL + INITIAL_CARDBACK_NUM) {
-                    while (poolcardsElement.childNodes.length > INITIAL_CARDBACK_NUM) {
-                        let name = poolcardsElement.lastChild.style.backgroundImage.slice(9, -6);
-                        for (let j = 0; j < visitedNormalCardList.length; j++) {
-                            if (visitedNormalCardList[j][0] == name) {
-                                visitedNormalCardList[j][1] = false;
-                                break;
-                            }
-                        }
-                        poolcardsElement.removeChild(poolcardsElement.lastChild);
-                    }
-                    poolCardList = createNormalCard(MIN_CARD_NUM_IN_POOL, CARD_HD_IN_POOL, poolcardsElement);
-                    listenNormalCard(poolcardsElement, INITIAL_CARDBACK_NUM);
-                    bindPoolCard(INITIAL_CARDBACK_NUM);
+                    shuffleDeck();
                     bindMyCard();
                     return;
                 }
@@ -470,8 +470,31 @@ function bindMyCard() {
     }
 }
 
+function shuffleDeck() {
+    var poolcardsElement = document.getElementById('poolcards');
+    while (poolcardsElement.childNodes.length > INITIAL_CARDBACK_NUM) {
+        let name = poolcardsElement.lastChild.style.backgroundImage.slice(9, -6);
+        for (let j = 0; j < visitedNormalCardList.length; j++) {
+            if (visitedNormalCardList[j][0] == name) {
+                visitedNormalCardList[j][1] = false;
+                break;
+            }
+        }
+        poolcardsElement.removeChild(poolcardsElement.lastChild);
+    }
+    poolCardList = createNormalCard(MIN_CARD_NUM_IN_POOL, CARD_HD_IN_POOL, poolcardsElement);
+    listenNormalCard(poolcardsElement, INITIAL_CARDBACK_NUM);
+    bindPoolCard(INITIAL_CARDBACK_NUM);
+
+}
+
 //Swap card between pool container and your container.
 function swapCards(myCard, poolCard) {
+    poolCardName = poolCard.style.backgroundImage.slice(9, -6);
+    myCardName = myCard.style.backgroundImage.slice(9, -6);
+    console.log('@我方 使用[' + myCardName + '] 换取[' + poolCardName + ']');
+    poolCardList = deleteCard(poolCardList, poolCardName);
+    poolCardList.push(myCardName);
     var poolcardsElement = document.getElementById('poolcards');
     var mycardsElement = document.getElementById('mycards');
     var temp = myCard.style.backgroundImage;
@@ -510,9 +533,13 @@ function bindPoolCard(st) {
                 for (let j = 0; j < mycardsElement.childNodes.length; j++) {
                     if (mycardsElement.childNodes[j].classList.contains('cardshadow')) {
                         mycardsElement.childNodes[j].classList.remove('cardshadow');
-                        myOwnedCardList.push(this.style.backgroundImage.slice(9, -6));
-                        myOwnedCardList.push(mycardsElement.childNodes[j].style.backgroundImage.slice(9, -6));
-                        transfer([this, mycardsElement.childNodes[j]]);
+                        var poolCardName = this.style.backgroundImage.slice(9, -6);
+                        var myCardName = mycardsElement.childNodes[j].style.backgroundImage.slice(9, -6)
+                        myOwnedCardList.push(myCardName, poolCardName);
+                        poolCardList = deleteCard(poolCardList, poolCardName);
+                        console.log('我方 消耗[' + myCardName + ']' + ' 入手[' + poolCardName + ']');
+                        console.log('我方 已拥有的卡牌 ' + myOwnedCardList + '\n');
+                        transfer([this, mycardsElement.childNodes[j]], myboard);
                         reflowPoolCards();
                         reflowNormalCards(mycardsElement.childNodes);
                         bindMyCard();
@@ -524,23 +551,24 @@ function bindPoolCard(st) {
                         poolcardsElement.childNodes[k].classList.remove('cardshadow');
                     }
                 }
-                checkComb();
+                checkComb(myOwnedCardList);
                 setScore(myscore, myCurrentScore);
+                setTimeout("simulate()", 1600);
             }
         }, true)
     }
 }
 
 //Transfer card from container to board.
-function transfer(elements) {
+function transfer(elements, board) {
     for (let i = 0; i < elements.length; i++) {
         elements[i].style.top = 0;
         elements[i].style.left = 0;
         elements[i].style.transform = 'rotate(' + getRandom(22.5) * (i & 1 ? -1 : 1) + 'deg)';
-        elements[i].style.zIndex = myboard.childNodes.length + i + 1;
+        elements[i].style.zIndex = board.childNodes.length + i + 1;
         elements[i].onmouseover = null;
         elements[i].onmouseout = null;
-        myboard.appendChild(elements[i]);
+        board.appendChild(elements[i]);
     }
 }
 
@@ -556,6 +584,7 @@ function reflowPoolCards() {
         index = getRandom(TOTAL_NORMAL_CARD);
         if (!visitedNormalCardList[index][1]) {
             visitedNormalCardList[index][1] = true;
+            poolCardList.push(visitedNormalCardList[index][0]);
             break;
         }
     }
@@ -595,4 +624,90 @@ function showOverview() {
 //Get random number among [0, maxn-1].
 function getRandom(maxn) {
     return Math.floor(Math.random() * maxn);
+}
+
+function simulate() {
+    var check = true;
+    var deletePoolCardName;
+    var deleteYourCardName;
+    var poolcardsElement = document.getElementById('poolcards');
+    var yourcardsElement = document.getElementById('yourcards');
+    for (let i = 0; (i < yourNormalCardList.length) && check; i++) {
+        var yourCardSeason = normalCardList.get(yourNormalCardList[i])[2];
+        for (let j = 0; (j < poolCardList.length) && check; j++) {
+            var poolCardSeason = normalCardList.get(poolCardList[j])[2];
+            if (yourCardSeason == poolCardSeason) {
+                check = false;
+                deleteYourCardName = yourNormalCardList[i];
+                deletePoolCardName = poolCardList[j];
+            }
+        }
+    }
+    if (!check) {
+        yourNormalCardList = deleteCard(yourNormalCardList, deleteYourCardName);
+        yourOwnedCardList.push(deleteYourCardName, deletePoolCardName);
+        for (let i = 0; i < poolcardsElement.childNodes.length; i++) {
+            var poolCardName = poolcardsElement.childNodes[i].style.backgroundImage.slice(9, -6);
+            if (poolCardName == deletePoolCardName) {
+                poolcardsElement.removeChild(poolcardsElement.childNodes[i]);
+                poolCardList = deleteCard(poolCardList, poolCardName);
+                var yourCard = document.createElement('div');
+                yourCard.classList.add('card');
+                yourCard.style.backgroundImage = 'url(img/' + deleteYourCardName + '.jpg)';
+                var poolCard = document.createElement('div');
+                poolCard.classList.add('card');
+                poolCard.style.backgroundImage = 'url(img/' + deletePoolCardName + '.jpg)';
+                console.log('对方 消耗[' + deleteYourCardName + ']' + ' 入手[' + deletePoolCardName + ']');
+                console.log('对方 已拥有的卡牌 ' + yourOwnedCardList + '\n');
+                transfer([poolCard, yourCard], yourboard);
+                reflowPoolCards();
+                yourcardsElement.removeChild(yourcardsElement.childNodes[0]);
+                reflowNormalCards(yourcardsElement.childNodes);
+                break;
+            }
+        }
+        checkComb(yourOwnedCardList);
+        setScore(yourscore, yourCurrentScore);
+        if (!yourNormalCardList.length) {
+            setTimeout("alertResult()", 2000);
+        }
+    }
+    else {
+        if (poolcardsElement.childNodes.length >= MAX_CARD_NUM_IN_POOL + INITIAL_CARDBACK_NUM) {
+            shuffleDeck();
+            setTimeout("simulate()", 1600);
+            return;
+        }
+        reflowPoolCards();
+        var yourCardName = yourNormalCardList[0];
+        var poolCardName = poolCardList.pop();
+        console.log('@对方 使用[' + yourCardName + '] 换取[' + poolCardName + ']');
+        yourNormalCardList = deleteCard(yourNormalCardList, yourCardName);
+        yourNormalCardList.push(poolCardName);
+        poolCardList.push(yourCardName);
+        poolcardsElement.lastChild.style.backgroundImage = 'url(img/' + yourCardName + '.jpg)';
+        listenNormalCard(poolcardsElement, INITIAL_CARDBACK_NUM);
+        bindPoolCard(INITIAL_CARDBACK_NUM);
+        setTimeout("simulate()", 1600);
+    }
+}
+
+function deleteCard(cardList, cardName) {
+    var cards = [];
+    for (let i = 0; i < cardList.length; i++) {
+        if (cardList[i] != cardName) {
+            cards.push(cardList[i]);
+        }
+    }
+    return cards;
+}
+
+function alertResult() {
+    if (myCurrentScore > yourCurrentScore) {
+        alert('你赢了~~');
+    }
+    else {
+        alert('你输了~~');
+    }
+    window.location.reload();
 }
