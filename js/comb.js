@@ -179,6 +179,7 @@ function createRecommendedCard() {
 }
 
 function checkComb(ownedCardList) {
+    var cnt = 0;
     if (ownedCardList == myOwnedCardList) {
         myCurrentScore += 4;
     }
@@ -200,7 +201,7 @@ function checkComb(ownedCardList) {
                     myCurrentScore += parseInt(value[0]);
                     myCompletedCombList.set(key, value);
                     console.log('~我方 完成组对[' + value[1] + ']' + ' 获得额外分值' + value[0] + '分');
-
+                    alertComb(key, value, cnt++);
                 }
                 else {
                     yourCurrentScore += parseInt(value[0]);
@@ -215,4 +216,38 @@ function checkComb(ownedCardList) {
 
 function setScore(element, currentScore) {
     element.innerHTML = currentScore;
+}
+
+function alertComb(key, value, dfn) {
+    setTimeout(() => { setDisplay(alertbox, 'block', key, value) }, 0 + 2000 * dfn);
+    setTimeout(() => { transform(alertbox, 'hide', 'show'); }, 0 + 2000 * dfn);
+    setTimeout(() => { transform(alertbox, 'show', 'hide'); }, 1200 + 2000 * dfn);
+    setTimeout(() => { setDisplay(alertbox, 'none', key, value) }, 1800 + 2000 * dfn);
+}
+
+function setDisplay(element, display, key, value) {
+    if (display == 'block') {
+        var combName = document.getElementsByTagName('span')[1];
+        var combScore = document.getElementsByTagName('span')[2];
+        combName.innerHTML = value[1];
+        combScore.innerHTML = value[0];
+        var broadcastimageElement = document.getElementById('broadcastimage');
+        while (broadcastimageElement.hasChildNodes()) {
+            broadcastimageElement.removeChild(broadcastimageElement.lastChild);
+        }
+        for (let i = 0; i < key.length; i++) {
+            var card = document.createElement('div');
+            card.classList.add('alertimage');
+            card.style.backgroundImage = 'url(img/' + key[i] + '.jpg)';
+            broadcastimageElement.appendChild(card);
+        }
+    }
+    element.style.display = display;
+}
+
+function sleep(delay) {
+    var start = (new Date()).getTime();
+    while ((new Date()).getTime() - start < delay) {
+        continue;
+    }
 }
