@@ -551,9 +551,9 @@ function bindPoolCard(st) {
                         poolcardsElement.childNodes[k].classList.remove('cardshadow');
                     }
                 }
-                checkComb(myOwnedCardList);
+                var dfn = checkComb(myOwnedCardList);
                 setScore(myscore, myCurrentScore);
-                setTimeout("simulate()", 1600);
+                setTimeout("simulate()", 2000 + 2000 * dfn);
             }
         }, true)
     }
@@ -666,10 +666,10 @@ function simulate() {
                 break;
             }
         }
-        checkComb(yourOwnedCardList);
+        var dfn = checkComb(yourOwnedCardList);
         setScore(yourscore, yourCurrentScore);
         if (!yourNormalCardList.length) {
-            setTimeout("alertResult()", 2000);
+            setTimeout("alertResult()", 2000 + 2000 * dfn);
         }
     }
     else {
@@ -703,11 +703,18 @@ function deleteCard(cardList, cardName) {
 }
 
 function alertResult() {
+    setDisplay(alertbox, 'block');
+    transform(alertbox, 'hide', 'show');
+    broadcasttext.innerHTML = '点击任意按键退出牌局';
     if (myCurrentScore > yourCurrentScore) {
-        alert('你赢了~~');
+        broadcastimage.innerHTML = '胜利';
+        broadcastimage.classList.add('winner');
     }
     else {
-        alert('你输了~~');
+        broadcastimage.innerHTML = '败北';
+        broadcastimage.classList.add('loser');
     }
-    window.location.reload();
+    window.onclick = () => {
+        window.location.reload();
+    }
 }
