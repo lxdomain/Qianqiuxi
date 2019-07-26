@@ -201,34 +201,38 @@ function checkComb(ownedCardList) {
                     myCurrentScore += parseInt(value[0]);
                     myCompletedCombList.set(key, value);
                     console.log('~我方 完成组对[' + value[1] + ']' + ' 获得额外分值' + value[0] + '分');
-                    alertComb(key, value, cnt++);
+                    alertComb(key, value, cnt++, '我方');
                 }
                 else {
                     yourCurrentScore += parseInt(value[0]);
                     yourCompletedCombList.set(key, value);
                     console.log('~对方 完成组对[' + value[1] + ']' + ' 获得额外分值' + value[0] + '分');
+                    alertComb(key, value, cnt++, '对方');
                 }
             }
         }
     }
     console.log('');
+    return cnt;
 }
 
 function setScore(element, currentScore) {
     element.innerHTML = currentScore;
 }
 
-function alertComb(key, value, dfn) {
-    setTimeout(() => { setDisplay(alertbox, 'block', key, value) }, 0 + 2000 * dfn);
+function alertComb(key, value, dfn, side) {
+    setTimeout(() => { setDisplay(alertbox, 'block', key, value, side) }, 0 + 2000 * dfn);
     setTimeout(() => { transform(alertbox, 'hide', 'show'); }, 0 + 2000 * dfn);
     setTimeout(() => { transform(alertbox, 'show', 'hide'); }, 1200 + 2000 * dfn);
-    setTimeout(() => { setDisplay(alertbox, 'none', key, value) }, 1800 + 2000 * dfn);
+    setTimeout(() => { setDisplay(alertbox, 'none', key, value, side) }, 1800 + 2000 * dfn);
 }
 
-function setDisplay(element, display, key, value) {
-    if (display == 'block') {
-        var combName = document.getElementsByTagName('span')[1];
-        var combScore = document.getElementsByTagName('span')[2];
+function setDisplay(element, display, key, value, side) {
+    if (display == 'block' && key && value && side) {
+        var combSide = document.getElementsByTagName('span')[1];
+        var combName = document.getElementsByTagName('span')[2];
+        var combScore = document.getElementsByTagName('span')[3];
+        combSide.innerHTML = side;
         combName.innerHTML = value[1];
         combScore.innerHTML = value[0];
         var broadcastimageElement = document.getElementById('broadcastimage');
