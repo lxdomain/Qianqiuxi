@@ -26,7 +26,7 @@ function abandonCard(normalCardList, dom) {
             selectedCard.style.backgroundImage = 'url(' + "img/" + normalCardList[i] + ".jpg" + ')';
             trickimage.appendChild(selectedCard);
 
-
+            var card = [];
             while (card.length < 3) {
                 index = getRandom(TOTAL_NORMAL_CARD);
                 if (!visitedNormalCardList[index][1]) {
@@ -63,7 +63,7 @@ function abandonCard(normalCardList, dom) {
                     listenNormalCard(mycards);
                     bindNormalCard(mycards);
                     removeContextmenuEvents(dom);
-                    card = [];
+                    // card = [];
                     trickback.onclick();
                 }
             }
