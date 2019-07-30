@@ -217,7 +217,9 @@ function start() {
 
     myNormalCardList = createNormalCard(INITIAL_CARD_NUM, INITIAL_CARD_HD, mycardsElement);
     listenNormalCard(mycardsElement);
-    bindMyCard();
+    bindNormalCard(mycardsElement);
+
+    abandonCard(myNormalCardList, mycardsElement);
 }
 
 //Hide firt stage and show second stage.
@@ -270,7 +272,7 @@ function showMySpecialCard() {
 
 //Listen selected special cards on second stage.
 function reflowMySpecialCard() {
-    clearViewportContainer();
+    clearChildNodes(viewportcontainer);
     var previewboxElement = document.getElementById('previewbox');
     var descriptiontextElements = document.getElementsByClassName('descriptiontext');
     for (let i = 0; i < mySpecialCardList.length; i++) {
@@ -301,7 +303,7 @@ function reflowMySpecialCard() {
 }
 
 function reflowOwnedCard(ownedcardList) {
-    clearViewportContainer();
+    clearChildNodes(viewportcontainer);
     var viewportcontainerElement = document.getElementById('viewportcontainer');
     for (let i = 0; i < ownedcardList.length; i++) {
         var card = document.createElement('div');
@@ -314,13 +316,6 @@ function reflowOwnedCard(ownedcardList) {
 
 function reflowCompletedComb(completedCombList) {
     reflowRecommendedComb(completedCombList);
-}
-
-function clearViewportContainer() {
-    var viewportcontainerElement = document.getElementById('viewportcontainer');
-    while (viewportcontainerElement.hasChildNodes()) {
-        viewportcontainerElement.removeChild(viewportcontainerElement.lastChild);
-    }
 }
 
 //Template for creating card backs in container.
@@ -426,28 +421,28 @@ function listenMyOwnedlCard(element) {
 
 //Cards of the same season will be luminous.
 //Do not use EventListener on this recursive function!
-function bindMyCard() {
+function bindNormalCard(dom) {
     var mycardsElement = document.getElementById('mycards');
     var poolcardsElement = document.getElementById('poolcards');
-    for (let i = 0; i < mycardsElement.childNodes.length; i++) {
+    for (let i = 0; i < dom.childNodes.length; i++) {
         if (checkSeason()) {
-            mycardsElement.childNodes[i].onclick = function () {
+            dom.childNodes[i].onclick = function () {
                 for (let j = INITIAL_CARDBACK_NUM; j < poolcardsElement.childNodes.length; j++) {
                     if (poolcardsElement.childNodes[j].classList.contains('cardshadow')) {
                         poolcardsElement.childNodes[j].classList.remove('cardshadow');
                     }
                 }
-                for (let i = 0; i < mycardsElement.childNodes.length; i++) {
-                    if (mycardsElement.childNodes[i].classList.contains('cardshadow')) {
-                        mycardsElement.childNodes[i].style.top = '';
-                        mycardsElement.childNodes[i].classList.remove('cardshadow');
-                        if (this === mycardsElement.childNodes[i])
+                for (let i = 0; i < dom.childNodes.length; i++) {
+                    if (dom.childNodes[i].classList.contains('cardshadow')) {
+                        dom.childNodes[i].style.top = '';
+                        dom.childNodes[i].classList.remove('cardshadow');
+                        if (this === dom.childNodes[i])
                             return;
                     }
                 }
-                mycardsElement.childNodes[i] && (mycardsElement.childNodes[i].style.top = '-30%');
-                mycardsElement.childNodes[i] && (mycardsElement.childNodes[i].classList.add('cardshadow'));
-                mycardsElement.childNodes[i] && (myCardName = mycardsElement.childNodes[i].style.backgroundImage.slice(9, -6));
+                dom.childNodes[i] && (dom.childNodes[i].style.top = '-30%');
+                dom.childNodes[i] && (dom.childNodes[i].classList.add('cardshadow'));
+                dom.childNodes[i] && (myCardName = dom.childNodes[i].style.backgroundImage.slice(9, -6));
                 for (let j = INITIAL_CARDBACK_NUM; j < poolcardsElement.childNodes.length; j++) {
                     var poolCardName = poolcardsElement.childNodes[j].style.backgroundImage.slice(9, -6);
                     if (normalCardList.get(myCardName)[2] == normalCardList.get(poolCardName)[2]) {
@@ -457,10 +452,10 @@ function bindMyCard() {
             }
         }
         else {
-            mycardsElement.childNodes[i].onclick = function () {
+            dom.childNodes[i].onclick = function () {
                 if (poolcardsElement.childNodes.length >= MAX_CARD_NUM_IN_POOL + INITIAL_CARDBACK_NUM) {
                     shuffleDeck();
-                    bindMyCard();
+                    bindNormalCard(mycardsElement);
                     return;
                 }
                 reflowPoolCards();
@@ -495,6 +490,12 @@ function swapCards(myCard, poolCard) {
     console.log('@我方 使用[' + myCardName + '] 换取[' + poolCardName + ']');
     poolCardList = deleteCard(poolCardList, poolCardName);
     poolCardList.push(myCardName);
+    for (let i = 0; i < myNormalCardList.length; i++) {
+        if (myNormalCardList[i] == myCardName) {
+            myNormalCardList[i] = poolCardName;
+            break;
+        }
+    }
     var poolcardsElement = document.getElementById('poolcards');
     var mycardsElement = document.getElementById('mycards');
     var temp = myCard.style.backgroundImage;
@@ -503,7 +504,7 @@ function swapCards(myCard, poolCard) {
     listenNormalCard(poolcardsElement, INITIAL_CARDBACK_NUM);
     bindPoolCard(INITIAL_CARDBACK_NUM);
     listenNormalCard(mycardsElement);
-    bindMyCard();
+    bindNormalCard(mycardsElement);
 }
 
 //Check whether it is need to swap card or not.
@@ -537,12 +538,13 @@ function bindPoolCard(st) {
                         var myCardName = mycardsElement.childNodes[j].style.backgroundImage.slice(9, -6)
                         myOwnedCardList.push(myCardName, poolCardName);
                         poolCardList = deleteCard(poolCardList, poolCardName);
+                        myNormalCardList = deleteCard(myNormalCardList, myCardName);
                         console.log('我方 消耗[' + myCardName + ']' + ' 入手[' + poolCardName + ']');
                         console.log('我方 已拥有的卡牌 ' + myOwnedCardList + '\n');
                         transfer([this, mycardsElement.childNodes[j]], myboard);
                         reflowPoolCards();
                         reflowNormalCards(mycardsElement.childNodes);
-                        bindMyCard();
+                        bindNormalCard(mycardsElement);
                         break;
                     }
                 }
@@ -554,6 +556,7 @@ function bindPoolCard(st) {
                 var dfn = checkComb(myOwnedCardList);
                 setScore(myscore, myCurrentScore);
                 setTimeout("simulate()", 2000 + 2000 * dfn);
+                abandonCard(myNormalCardList, mycardsElement);
             }
         }, true)
     }
@@ -575,6 +578,7 @@ function transfer(elements, board) {
 //Reflow all the cards in pool container.
 function reflowPoolCards() {
     var poolcardsElement = document.getElementById('poolcards');
+    var mycardsElement = document.getElementById('mycards');
     for (var i = INITIAL_CARDBACK_NUM, l = CARD_HD_IN_POOL; i < poolcardsElement.childNodes.length; i++ , l += CARD_HD_IN_POOL) {
         poolcardsElement.childNodes[i].style.left = l + '%';
         poolcardsElement.childNodes[i].style.bottom = (i & 1) + '%';
@@ -597,7 +601,7 @@ function reflowPoolCards() {
     poolcardsElement.appendChild(card);
     listenNormalCard(poolcardsElement, i);
     bindPoolCard(i);
-    bindMyCard();
+    bindNormalCard(mycardsElement);
 }
 
 //Reflow all the cards in your container.
