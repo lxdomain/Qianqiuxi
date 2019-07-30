@@ -87,3 +87,39 @@
     top: 60%;
     left: 40%;
 }
+
+.alertimage {
+    height: var(--card-height);
+    width: var(--card-width);
+    display: inline-flex;
+    background-size: cover;
+    margin: 5px 10px;
+    border-radius: 5px;
+    justify-content: center;
+    border: 1px solid var(--text-color4);
+    box-sizing: border-box;
+}
+
+.winner {
+    background: linear-gradient(to top, yellow, orange 50%, red);
+    background-clip: border-box;
+    -webkit-background-clip: text;
+    color: transparent;
+    font-weight: bolder;
+    font-size: 10em;
+    font-family: '宋体';
+}
+
+.loser {
+    background: linear-gradient(to top, pink, purple 50%, blue);
+    background-clip: border-box;
+    -webkit-background-clip: text;
+    color: transparent;
+    font-weight: bolder;
+    font-size: 10em;
+    font-family: '宋体';
+}
+
+.noborder {
+    border: none;
+}
