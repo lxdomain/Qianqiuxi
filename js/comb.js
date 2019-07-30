@@ -130,7 +130,7 @@ var combList = new Map([
 ]);
 
 function reflowRecommendedComb(which) {
-    clearViewportContainer();
+    clearChildNodes(viewportcontainer);
     var viewportcontainerElement = document.getElementById('viewportcontainer');
     viewportcontainerElement.style.overflowY = 'scroll';
     for (let [key, value] of which.entries()) {
