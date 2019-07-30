@@ -60,7 +60,7 @@ var specialCardList = new Map(
     ]);
 
 window.onload = function () {
-    window.card = [];
+    // window.card = [];
     document.oncontextmenu = new Function("event.returnValue=false");
     document.onselectstart = new Function("event.returnValue=false");
     createBlankElement();
