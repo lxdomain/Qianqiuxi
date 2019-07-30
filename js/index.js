@@ -9,6 +9,7 @@ const MIN_CARD_NUM_IN_POOL = 8;
 const MAX_CARD_NUM_IN_POOL = 10;
 const CARD_HD_IN_POOL = 7;
 const ZINDEX_BASE = 99;
+const ZINDEX_INF = 999;
 
 var specialCardList = new Map(
     [
@@ -59,6 +60,9 @@ var specialCardList = new Map(
     ]);
 
 window.onload = function () {
+    window.card = [];
+    document.oncontextmenu = new Function("event.returnValue=false");
+    document.onselectstart = new Function("event.returnValue=false");
     createBlankElement();
     listenSpecialCard();
 }
