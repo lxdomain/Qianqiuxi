@@ -107,3 +107,7 @@
 .hide {
     animation: fadeout 600ms linear forwards;
 }
+
+#trickbox>#trickbody>#trickimage div:nth-child(n+1):hover {
+    border: 1px solid var(--text-color4);
+}
