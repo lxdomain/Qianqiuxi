@@ -161,7 +161,7 @@
     top: 50%;
 }
 
-#viewportback {
+#viewportback, #trickback {
     height: 75%;
     width: 15%;
     display: inline-block;
@@ -174,7 +174,7 @@
     left: 65%;
 }
 
-#viewportback:hover {
+#viewportback:hover, #trickback:hover {
     text-shadow: 3px 3px 5px var(--text-color5);
 }
 
@@ -206,7 +206,7 @@
     top: 30%;
 }
 
-#alertbox {
+#alertbox, #trickbox {
     height: 100%;
     width: 100%;
     position: absolute;
@@ -234,7 +234,7 @@
     background-image: linear-gradient(to left, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.2)50%, rgba(0, 0, 0, 0) 100%);
 }
 
-#broadcastimage {
+#broadcastimage, #trickimage {
     height: 60%;
     width: 60%;
     position: absolute;
@@ -247,34 +247,24 @@
     align-items: center;
 }
 
-.alertimage {
-    height: var(--card-height);
-    width: var(--card-width);
-    display: inline-flex;
-    background-size: cover;
-    margin: 5px 10px;
-    border-radius: 5px;
-    justify-content: center;
-    border: 1px solid var(--text-color4);
-    box-sizing: border-box;
+#trickhead {
+    height: 10%;
+    width: 100%;
 }
 
-.winner {
-    background: linear-gradient(to top, yellow, orange 50%, red);
-    background-clip: border-box;
-    -webkit-background-clip: text;
-    color: transparent;
-    font-weight: bolder;
-    font-size: 10em;
-    font-family: '宋体';
+#trickback {
+    left: 85%;
 }
 
-.loser {
-    background: linear-gradient(to top, pink, purple 50%, blue);
-    background-clip: border-box;
-    -webkit-background-clip: text;
-    color: transparent;
-    font-weight: bolder;
-    font-size: 10em;
-    font-family: '宋体';
+#trickbody {
+    height: 45%;
+    width: 60%;
+    position: absolute;
+    top: 25%;
+    left: 20%;
+}
+
+#tricktext {
+    background-image: none;
+    text-align: center;
 }
