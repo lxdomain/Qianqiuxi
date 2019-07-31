@@ -254,7 +254,7 @@ function saveMySpecialCard() {
     for (let i = 0; i < cardcontainerElement.childNodes.length; i++) {
         if (cardcontainerElement.childNodes[i].classList.contains('scanned')) {
             var name = cardcontainerElement.childNodes[i].style.backgroundImage.slice(9, -6);
-            mySpecialCardList.push(name);
+            mySpecialCardList.push([name, false]);
         }
     }
 }
@@ -264,7 +264,7 @@ function showMySpecialCard() {
     for (let i = 0; i < mySpecialCardList.length; i++) {
         var card = document.createElement('div');
         card.classList.add('card');
-        card.style.backgroundImage = 'url(img/' + mySpecialCardList[i] + '.jpg)';
+        card.style.backgroundImage = 'url(img/' + mySpecialCardList[i][0] + '.jpg)';
         card.style.transform = 'rotate(' + getRandom(45) * (i & 1 ? -1 : 1) + 'deg)';
         specialcard.appendChild(card);
     }
@@ -276,29 +276,32 @@ function reflowMySpecialCard() {
     var previewboxElement = document.getElementById('previewbox');
     var descriptiontextElements = document.getElementsByClassName('descriptiontext');
     for (let i = 0; i < mySpecialCardList.length; i++) {
-        var card = document.createElement('div');
-        card.classList.add('scanned');
-        card.style.backgroundImage = 'url(img/' + mySpecialCardList[i] + '.jpg)';
-        var viewportcontainerElement = document.getElementById('viewportcontainer');
-        viewportcontainerElement.appendChild(card);
+        if (!mySpecialCardList[i][1]) {
+            var card = document.createElement('div');
+            card.classList.add('scanned');
+            card.style.backgroundImage = 'url(img/' + mySpecialCardList[i][0] + '.jpg)';
+            var viewportcontainerElement = document.getElementById('viewportcontainer');
+            viewportcontainerElement.appendChild(card);
 
-        card.addEventListener('mouseover', function () {
-            previewboxElement.style.backgroundImage = this.style.backgroundImage;
-            descriptiontextElements[0].innerHTML = mySpecialCardList[i].split('·')[0] + '&#9733' + ' ' + specialCardList.get(mySpecialCardList[i])[0] + '分' + '<br>' + '<hr>';
-            descriptiontextElements[1].innerHTML = mySpecialCardList[i] + '<br>' + specialCardList.get(mySpecialCardList[i])[1] + '<br>';
-            descriptiontextElements[2].innerHTML = specialCardList.get(mySpecialCardList[i])[2];
-            transform(previewboxElement, 'hide', 'show');
-            transform(descriptiontextElements[0], 'hide', 'show');
-            transform(descriptiontextElements[1], 'hide', 'show');
-            transform(descriptiontextElements[2], 'hide', 'show');
-        }, true);
+            card.addEventListener('mouseover', function () {
+                previewboxElement.style.backgroundImage = this.style.backgroundImage;
+                descriptiontextElements[0].innerHTML = mySpecialCardList[i][0].split('·')[0] + '&#9733' + ' ' + specialCardList.get(mySpecialCardList[i][0])[0] + '分' + '<br>' + '<hr>';
+                descriptiontextElements[1].innerHTML = mySpecialCardList[i][0] + '<br>' + specialCardList.get(mySpecialCardList[i][0])[1] + '<br>';
+                descriptiontextElements[2].innerHTML = specialCardList.get(mySpecialCardList[i][0])[2];
+                transform(previewboxElement, 'hide', 'show');
+                transform(descriptiontextElements[0], 'hide', 'show');
+                transform(descriptiontextElements[1], 'hide', 'show');
+                transform(descriptiontextElements[2], 'hide', 'show');
+            }, true);
 
-        card.addEventListener('mouseout', function () {
-            transform(previewboxElement, 'show', 'hide');
-            transform(descriptiontextElements[0], 'show', 'hide');
-            transform(descriptiontextElements[1], 'show', 'hide');
-            transform(descriptiontextElements[2], 'show', 'hide');
-        }, true);
+            card.addEventListener('mouseout', function () {
+                transform(previewboxElement, 'show', 'hide');
+                transform(descriptiontextElements[0], 'show', 'hide');
+                transform(descriptiontextElements[1], 'show', 'hide');
+                transform(descriptiontextElements[2], 'show', 'hide');
+            }, true);
+        }
+
     }
 }
 
@@ -308,6 +311,13 @@ function reflowOwnedCard(ownedcardList) {
     for (let i = 0; i < ownedcardList.length; i++) {
         var card = document.createElement('div');
         card.style.backgroundImage = 'url(img/' + ownedcardList[i] + '.jpg)';
+        for (let j = 0; j < mySpecialCardList.length; j++) {
+            if (mySpecialCardList[j][0].includes(ownedcardList[i])) {
+                ownedcardList[i] = mySpecialCardList[j][0];
+                card.style.backgroundImage = 'url(img/' + mySpecialCardList[j][0] + '.jpg)';
+                break;
+            }
+        }
         card.classList.add('scanned');
         viewportcontainerElement.appendChild(card);
     }
@@ -395,16 +405,23 @@ function listenMyOwnedlCard(element) {
         let cardName = element.childNodes[j].style.backgroundImage.slice(9, -6);
         element.childNodes[j].onmouseover = () => {
             previewboxElement.style.backgroundImage = element.childNodes[j].style.backgroundImage;
-            descriptiontextElements[0].innerHTML = cardName + '&nbsp;&nbsp;&nbsp;&nbsp;' + '2分' + '<hr>';
-            descriptiontextElements[1].innerHTML = normalCardList.get(cardName)[1];
-            var str = '可形成组合的卡牌：' + '<br>';
-            for (let i = 0; i < recommendedCardList.get(cardName).length; i++) {
-                if (recommendedCardList.get(cardName)[i] != cardName) {
-                    str += recommendedCardList.get(cardName)[i] + '、';
-                }
+            if (cardName.includes('·')) {
+                descriptiontextElements[0].innerHTML = cardName.split('·')[0] + '&#9733' + '&nbsp;' + specialCardList.get(cardName)[0] + '分' + '<br>' + '<hr>';
+                descriptiontextElements[1].innerHTML = cardName + '<br>' + specialCardList.get(cardName)[1] + '<br>';
+                descriptiontextElements[2].innerHTML = specialCardList.get(cardName)[2];
             }
-            str = str.substring(0, str.length - 1);
-            descriptiontextElements[2].innerHTML = str;
+            else {
+                descriptiontextElements[0].innerHTML = cardName + '&nbsp;&nbsp;&nbsp;&nbsp;' + '2分' + '<hr>';
+                descriptiontextElements[1].innerHTML = normalCardList.get(cardName)[1];
+                var str = '可形成组合的卡牌：' + '<br>';
+                for (let i = 0; i < recommendedCardList.get(cardName).length; i++) {
+                    if (recommendedCardList.get(cardName)[i] != cardName) {
+                        str += recommendedCardList.get(cardName)[i] + '、';
+                    }
+                }
+                str = str.substring(0, str.length - 1);
+                descriptiontextElements[2].innerHTML = str;
+            }
             transform(previewboxElement, 'hide', 'show');
             transform(descriptiontextElements[0], 'hide', 'show');
             transform(descriptiontextElements[1], 'hide', 'show');
@@ -535,13 +552,31 @@ function bindPoolCard(st) {
                     if (mycardsElement.childNodes[j].classList.contains('cardshadow')) {
                         mycardsElement.childNodes[j].classList.remove('cardshadow');
                         var poolCardName = this.style.backgroundImage.slice(9, -6);
-                        var myCardName = mycardsElement.childNodes[j].style.backgroundImage.slice(9, -6)
+                        var myCardName = mycardsElement.childNodes[j].style.backgroundImage.slice(9, -6);
                         myOwnedCardList.push(myCardName, poolCardName);
                         poolCardList = deleteCard(poolCardList, poolCardName);
                         myNormalCardList = deleteCard(myNormalCardList, myCardName);
                         console.log('我方 消耗[' + myCardName + ']' + ' 入手[' + poolCardName + ']');
                         console.log('我方 已拥有的卡牌 ' + myOwnedCardList + '\n');
-                        transfer([this, mycardsElement.childNodes[j]], myboard);
+                        for (let pos = 2; pos >= 1; pos--) {
+                            for (let k = 0; k < specialcard.childNodes.length; k++) {
+                                var specialCardName = specialcard.childNodes[k].style.backgroundImage.slice(9, -6);
+                                if (specialCardName.includes(pos == 1 ? poolCardName : myCardName)) {
+                                    myOwnedCardList[myOwnedCardList.length - pos] = specialCardName;
+                                    console.log('我方 触发特殊牌[' + specialCardName + ']');
+                                    console.log('我方 已拥有的卡牌 ' + myOwnedCardList + '\n');
+                                    specialcard.removeChild(specialcard.childNodes[k]);
+                                    for (let index = 0; index < mySpecialCardList.length; index++) {
+                                        if (mySpecialCardList[index][0] == specialCardName) {
+                                            mySpecialCardList[index][1] = true;
+                                            break;
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                        transfer([this, mycardsElement.childNodes[j]], myboard, mySpecialCardList);
                         reflowPoolCards();
                         reflowNormalCards(mycardsElement.childNodes);
                         bindNormalCard(mycardsElement);
@@ -563,7 +598,7 @@ function bindPoolCard(st) {
 }
 
 //Transfer card from container to board.
-function transfer(elements, board) {
+function transfer(elements, board, specialCardList) {
     for (let i = 0; i < elements.length; i++) {
         elements[i].style.top = 0;
         elements[i].style.left = 0;
@@ -571,6 +606,14 @@ function transfer(elements, board) {
         elements[i].style.zIndex = board.childNodes.length + i + 1;
         elements[i].onmouseover = null;
         elements[i].onmouseout = null;
+        if (specialCardList != undefined) {
+            for (let j = 0; j < specialCardList.length; j++) {
+                if (specialCardList[j][0].includes(elements[i].style.backgroundImage.slice(9, -6))) {
+                    elements[i].style.backgroundImage = 'url(img/' + specialCardList[j][0] + '.jpg)';
+                    break;
+                }
+            }
+        }
         board.appendChild(elements[i]);
     }
 }
