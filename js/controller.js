@@ -312,7 +312,7 @@ function reflowOwnedCard(ownedcardList) {
         var card = document.createElement('div');
         card.style.backgroundImage = 'url(img/' + ownedcardList[i] + '.jpg)';
         for (let j = 0; j < mySpecialCardList.length; j++) {
-            if (mySpecialCardList[j][0].includes(ownedcardList[i])) {
+            if (mySpecialCardList[j][0].split('·')[0] == ownedcardList[i]) {
                 ownedcardList[i] = mySpecialCardList[j][0];
                 card.style.backgroundImage = 'url(img/' + mySpecialCardList[j][0] + '.jpg)';
                 break;
@@ -561,7 +561,7 @@ function bindPoolCard(st) {
                         for (let pos = 2; pos >= 1; pos--) {
                             for (let k = 0; k < specialcard.childNodes.length; k++) {
                                 var specialCardName = specialcard.childNodes[k].style.backgroundImage.slice(9, -6);
-                                if (specialCardName.includes(pos == 1 ? poolCardName : myCardName)) {
+                                if (specialCardName.split('·')[0] == (pos == 1 ? poolCardName : myCardName)) {
                                     myOwnedCardList[myOwnedCardList.length - pos] = specialCardName;
                                     console.log('我方 触发特殊牌[' + specialCardName + ']');
                                     console.log('我方 已拥有的卡牌 ' + myOwnedCardList + '\n');
@@ -608,7 +608,7 @@ function transfer(elements, board, specialCardList) {
         elements[i].onmouseout = null;
         if (specialCardList != undefined) {
             for (let j = 0; j < specialCardList.length; j++) {
-                if (specialCardList[j][0].includes(elements[i].style.backgroundImage.slice(9, -6))) {
+                if (specialCardList[j][0].split('·')[0] == elements[i].style.backgroundImage.slice(9, -6)) {
                     elements[i].style.backgroundImage = 'url(img/' + specialCardList[j][0] + '.jpg)';
                     break;
                 }
