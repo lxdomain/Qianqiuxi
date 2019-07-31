@@ -180,12 +180,7 @@ function createRecommendedCard() {
 
 function checkComb(ownedCardList) {
     var cnt = 0;
-    if (ownedCardList == myOwnedCardList) {
-        myCurrentScore += 4;
-    }
-    else {
-        yourCurrentScore += 4;
-    }
+    updateCombList(ownedCardList);
     for (let [key, value] of combList.entries()) {
         let check = true;
         for (let i = 0; i < key.length; i++) {
@@ -198,18 +193,44 @@ function checkComb(ownedCardList) {
             if (!value[2]) {
                 value[2] = true;
                 if (ownedCardList == myOwnedCardList) {
-                    myCurrentScore += parseInt(value[0]);
                     myCompletedCombList.set(key, value);
                     console.log('~我方 完成组对[' + value[1] + ']' + ' 获得额外分值' + value[0] + '分');
                     alertComb(key, value, cnt++, '我方');
                 }
                 else {
-                    yourCurrentScore += parseInt(value[0]);
                     yourCompletedCombList.set(key, value);
                     console.log('~对方 完成组对[' + value[1] + ']' + ' 获得额外分值' + value[0] + '分');
                     alertComb(key, value, cnt++, '对方');
                 }
             }
+        }
+    }
+    if (ownedCardList == myOwnedCardList) {
+        myCurrentScore = 0;
+        for (let i = 0; i < ownedCardList.length; i++) {
+            if (ownedCardList[i].includes('·')) {
+                myCurrentScore += Number(specialCardList.get(ownedCardList[i])[0]);
+            }
+            else {
+                myCurrentScore += 2;
+            }
+        }
+        for (let value of myCompletedCombList.values()) {
+            myCurrentScore += parseInt(value[0]);
+        }
+    }
+    else {
+        yourCurrentScore = 0;
+        for (let i = 0; i < ownedCardList.length; i++) {
+            if (ownedCardList[i].includes('·')) {
+                yourCurrentScore += Number(specialCardList.get(ownedCardList[i])[0]);
+            }
+            else {
+                yourCurrentScore += 2;
+            }
+        }
+        for (let value of yourCompletedCombList.values()) {
+            yourCurrentScore += parseInt(value[0]);
         }
     }
     console.log('');
@@ -218,6 +239,19 @@ function checkComb(ownedCardList) {
 
 function setScore(element, currentScore) {
     element.innerHTML = currentScore;
+}
+
+function updateCombList(ownedCardList) {
+    for (let key of combList.keys()) {
+        for (let i = 0; i < key.length; i++) {
+            for (let j = 0; j < ownedCardList.length; j++) {
+                if (key[i] == ownedCardList[j].split('·')[0]) {
+                    key[i] = ownedCardList[j];
+                    break;
+                }
+            }
+        }
+    }
 }
 
 function alertComb(key, value, dfn, side) {
