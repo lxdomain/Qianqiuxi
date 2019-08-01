@@ -311,13 +311,6 @@ function reflowOwnedCard(ownedcardList) {
     for (let i = 0; i < ownedcardList.length; i++) {
         var card = document.createElement('div');
         card.style.backgroundImage = 'url(img/' + ownedcardList[i] + '.jpg)';
-        for (let j = 0; j < mySpecialCardList.length; j++) {
-            if (mySpecialCardList[j][0].split('·')[0] == ownedcardList[i]) {
-                ownedcardList[i] = mySpecialCardList[j][0];
-                card.style.backgroundImage = 'url(img/' + mySpecialCardList[j][0] + '.jpg)';
-                break;
-            }
-        }
         card.classList.add('scanned');
         viewportcontainerElement.appendChild(card);
     }
