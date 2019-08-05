@@ -31,7 +31,7 @@
 
 .score {
     text-align: center;
-    color: var(--text-score-color);
+    color: var(--text-number-color);
     font-size: 2em;
     font-weight: bold;
     font-family: '黑体';
@@ -54,12 +54,13 @@
 .boardtext {
     height: 5%;
     width: 100%;
-    color: var(--text-color8);
+    color: var(--text-board-color);
     font-size: 2em;
     font-family: '楷体';
-    text-shadow: 3px 3px 5px var(--text-color4);
+    text-shadow: 3px 3px 5px var(--card-border-color);
     background-image: linear-gradient(to left, rgba(58, 46, 35, 0) 0%, rgba(68, 50, 32, 1)50%, rgba(58, 46, 35, 0) 100%);
     position: absolute;
+    white-space: nowrap;
 }
 
 #table {
@@ -143,7 +144,7 @@
 #viewporthead {
     height: 10%;
     width: 100%;
-    background-color: var(--text-color7);
+    background-color: var(--scrollbar-color);
     opacity: 0.5;
     display: none;
 }
@@ -155,8 +156,8 @@
     font-size: 2em;
     font-family: '宋体';
     text-align: center;
-    text-shadow: 3px 3px 5px var(--text-color5);
-    color: var(--text-color8);
+    text-shadow: 3px 3px 5px var(--text-head-color);
+    color: var(--text-board-color);
     position: relative;
     top: 50%;
 }
@@ -168,14 +169,14 @@
     font-size: 2.5em;
     font-family: '华文彩云';
     text-align: center;
-    color: var(--text-color9);
+    color: var(--text-button-color);
     position: relative;
     top: 25%;
     left: 65%;
 }
 
 #viewportback:hover, #trickback:hover {
-    text-shadow: 3px 3px 5px var(--text-color5);
+    text-shadow: 3px 3px 5px var(--text-head-color);
 }
 
 #leftbox {
@@ -191,7 +192,7 @@
 }
 
 #ownedcard:hover, #completedcomb:hover, #recommendedcomb:hover {
-    text-shadow: 5px 5px 5px var(--text-color5);
+    text-shadow: 5px 5px 5px var(--text-head-color);
 }
 
 #ownedcard {
