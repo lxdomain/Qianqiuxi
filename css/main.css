@@ -1,20 +1,21 @@
 :root {
-    --text-shadow-color: rgb(68, 50, 32);
-    --text-border-color: rgb(172, 185, 204);
-    --text-hr-color: rgb(188, 127, 9);
-    --text-score-color: rgb(249, 235, 174);
-    --text-color1: rgb(255, 253, 200);
-    --text-color2: rgb(145, 145, 120);
-    --text-color3: rgb(218, 217, 198);
-    --text-color4: rgb(207, 162, 13);
-    --text-color5: rgb(255, 224, 107);
-    --text-color6: rgb(197, 42, 45);
-    --text-color7: rgb(56, 40, 28);
-    --text-color8: rgb(249, 244, 206);
-    --text-color9: rgb(250, 228, 164);
-    --card-width: 144.873px;
-    --card-height: 193.163px;
-    --card-border-color: #fceba4;
+    --page-background-color-light: rgb(154, 142, 130);
+    --page-background-color-thick: rgb(148, 137, 126);
+    --scrollbar-color: rgb(68, 50, 32);
+    --hr-color: rgb(188, 127, 9);
+    --button-content-color: rgb(218, 217, 198);
+    --button-border-color: rgb(172, 185, 204);
+    --text-head-color: rgb(255, 224, 107);
+    --text-body-color: rgb(255, 253, 200);
+    --text-number-color: rgb(249, 235, 174);
+    --text-tip-color: rgb(145, 145, 120);
+    --text-warning-color: rgb(197, 42, 45);
+    --text-board-color: rgb(249, 244, 206);
+    --text-button-color: rgb(250, 228, 164);
+    --card-luminous-color: rgb(252,235,164);
+    --card-border-color: rgb(207, 162, 13);
+    --card-width: 120px;
+    --card-height: 160px;
 }
 
 * {
@@ -23,14 +24,14 @@
     cursor: default;
 }
 
-body {
+*::before,*::after{
     box-sizing: border-box;
 }
 
 hr {
     height: 2px;
     border: none;
-    background-image: linear-gradient(to left, rgba(58, 46, 35, 0) 0%, var(--text-hr-color)50%, rgba(58, 46, 35, 0) 100%);
+    background-image: linear-gradient(to left, rgba(58, 46, 35, 0) 0%, var(--hr-color)50%, rgba(58, 46, 35, 0) 100%);
 }
 
 ::-webkit-scrollbar {
@@ -43,24 +44,46 @@ hr {
 
 ::-webkit-scrollbar-thumb {
     border-radius: 10px;
-    background-color: var(--text-shadow-color);
+    background-color: var(--scrollbar-color);
 }
 
 ::-webkit-scrollbar-button {
     height: 20px;
     border-radius: 10px;
-    background-color: var(--text-shadow-color);
+    background-color: var(--scrollbar-color);
 }
 
 ::-webkit-scrollbar-thumb:hover, ::-webkit-scrollbar-button:hover {
-    border: 1px solid var(--text-color4);
+    border: 1px solid var(--card-border-color);
     box-sizing: border-box;
 }
 
-.wrapper {
+.container, .wrapper {
     height: 100%;
     width: 100%;
-    background-image: url('../background.jpg');
+}
+
+.container.noselect {
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Safari */
+    -khtml-user-select: none;
+    /* Konqueror HTML */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently supported by Chrome and Opera */
+}
+
+.wrapper {
+    background-image: url('../background.jpg'), repeating-linear-gradient(-45deg, 
+    var(--page-background-color-light), 
+    var(--page-background-color-light) 1%, 
+    var(--page-background-color-thick) 1%, 
+    var(--page-background-color-thick) 2%);
     background-repeat: no-repeat;
     background-size: cover;
     position: fixed;
@@ -72,7 +95,7 @@ hr {
     margin-top: 50px;
     height: 40%;
     width: 80%;
-    box-shadow: 10px 10px 100px 0px var(--text-shadow-color) inset;
+    box-shadow: 10px 10px 100px 0px var(--scrollbar-color) inset;
     font-size: 16px;
     display: inline-block;
 }
@@ -92,6 +115,7 @@ hr {
     width: 25%;
     position: relative;
     float: left;
+    white-space: nowrap;
 }
 
 .specialcard {
@@ -102,7 +126,7 @@ hr {
     font-weight: bold;
     font-size: 2em;
     text-shadow: 2px 2px black;
-    color: var(--text-color1);
+    color: var(--text-body-color);
 }
 
 .ceiling {
@@ -113,7 +137,7 @@ hr {
     font-weight: bold;
     font-size: 1.5em;
     text-shadow: 1.5px 1.5px black;
-    color: var(--text-color2);
+    color: var(--text-tip-color);
 }
 
 #foot {
@@ -128,8 +152,8 @@ hr {
     padding: 10px 20px;
     position: absolute;
     background: transparent;
-    border: 2px solid var(--text-border-color);
-    color: var(--text-color3);
+    border: 2px solid var(--button-border-color);
+    color: var(--button-content-color);
     font-size: 1.5em;
     opacity: 0.8;
     cursor: pointer;
@@ -145,7 +169,7 @@ hr {
 }
 
 .btn:hover {
-    background-color: var(--text-shadow-color);
+    background-color: var(--scrollbar-color);
     transition-duration: 400ms;
 }
 
@@ -187,7 +211,7 @@ hr {
     font-size: 1em;
     letter-spacing: 2px;
     text-shadow: 1px 1px black;
-    color: var(--text-color1);
+    color: var(--text-body-color);
 }
 
 #cardname, #infotitle {
@@ -195,7 +219,7 @@ hr {
     width: 100%;
     line-height: 1.5;
     font-size: 1.5em;
-    color: var(--text-color5);
+    color: var(--text-head-color);
     text-align: center;
     position: absolute;
 }
