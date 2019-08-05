@@ -71,10 +71,10 @@
 
 @keyframes cardluminous {
     from {
-        box-shadow: 0 0 10px var(--card-border-color);
+        box-shadow: 0 0 10px var(--card-luminous-color);
     }
     to {
-        box-shadow: 0 0 15px var(--card-border-color);
+        box-shadow: 0 0 15px var(--card-luminous-color);
     }
 }
 
@@ -109,5 +109,5 @@
 }
 
 #trickbox>#trickbody>#trickimage div:nth-child(n+1):hover {
-    border: 1px solid var(--text-color4);
+    border: 1px solid var(--card-border-color);
 }
