@@ -79,11 +79,11 @@ hr {
 }
 
 .wrapper {
-    background-image: url('../background.jpg'), repeating-linear-gradient(-45deg, 
+    background-image: url('../background.jpg')/*, repeating-linear-gradient(-45deg, 
     var(--page-background-color-light), 
     var(--page-background-color-light) 1%, 
     var(--page-background-color-thick) 1%, 
-    var(--page-background-color-thick) 2%);
+    var(--page-background-color-thick) 2%)*/;
     background-repeat: no-repeat;
     background-size: cover;
     position: fixed;
