@@ -71,10 +71,10 @@
 
 @keyframes cardluminous {
     from {
-        box-shadow: 0 0 10px var(--card-luminous-color);
+        box-shadow: 0 0 0.5vw var(--card-luminous-color);
     }
     to {
-        box-shadow: 0 0 15px var(--card-luminous-color);
+        box-shadow: 0 0 0.75vw var(--card-luminous-color);
     }
 }
 

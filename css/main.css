@@ -14,8 +14,8 @@
     --text-button-color: rgb(250, 228, 164);
     --card-luminous-color: rgb(252,235,164);
     --card-border-color: rgb(207, 162, 13);
-    --card-width: 120px;
-    --card-height: 160px;
+    --card-width: 9vw;
+    --card-height: 12vw;
 }
 
 * {
@@ -35,21 +35,21 @@ hr {
 }
 
 ::-webkit-scrollbar {
-    width: 15px;
+    width: 0.5vw;
 }
 
 ::-webkit-scrollbar-track {
-    border-radius: 10px;
+    border-radius: 0.5vw;
 }
 
 ::-webkit-scrollbar-thumb {
-    border-radius: 10px;
+    border-radius: 0.5vw;
     background-color: var(--scrollbar-color);
 }
 
 ::-webkit-scrollbar-button {
-    height: 20px;
-    border-radius: 10px;
+    height: 0.75vw;
+    border-radius: 0.5vw;
     background-color: var(--scrollbar-color);
 }
 
@@ -92,11 +92,11 @@ hr {
 }
 
 #topbox, #bottombox {
-    margin-top: 50px;
+    margin-top: 1.5vw;
     height: 40%;
     width: 80%;
-    box-shadow: 10px 10px 100px 0px var(--scrollbar-color) inset;
-    font-size: 16px;
+    box-shadow: 0.5vw 0.5vw 5vw 0 var(--scrollbar-color) inset;
+    font-size: 0.75vw;
     display: inline-block;
 }
 
@@ -107,7 +107,7 @@ hr {
 }
 
 #bottombox {
-    margin-bottom: 10px;
+    margin-bottom: 0.5vw;
 }
 
 .notice {
@@ -124,8 +124,8 @@ hr {
     left: 20%;
     font-style: normal;
     font-weight: bold;
-    font-size: 2em;
-    text-shadow: 2px 2px black;
+    font-size: 2vw;
+    text-shadow: 0.2vw 0.2vw black;
     color: var(--text-body-color);
 }
 
@@ -135,8 +135,8 @@ hr {
     left: 30%;
     font-style: normal;
     font-weight: bold;
-    font-size: 1.5em;
-    text-shadow: 1.5px 1.5px black;
+    font-size: 1.5vw;
+    text-shadow: 0.15vw 0.15vw black;
     color: var(--text-tip-color);
 }
 
@@ -149,12 +149,12 @@ hr {
 }
 
 .btn {
-    padding: 10px 20px;
+    padding: 0.8vw 1.6vw;
     position: absolute;
     background: transparent;
     border: 2px solid var(--button-border-color);
     color: var(--button-content-color);
-    font-size: 1.5em;
+    font-size: 1.5vw;
     opacity: 0.8;
     cursor: pointer;
     display: inline-block;
@@ -188,15 +188,15 @@ hr {
 }
 
 #previewbox {
-    height: calc(var(--card-height)*1.2);
-    width: calc(var(--card-width)*1.2);
+    height: calc(var(--card-height)*0.9);
+    width: calc(var(--card-width)*0.9);
     background-repeat: no-repeat;
     background-size: cover;
     display: inline-block;
-    border-radius: 10px;
+    border-radius: 0.5vw;
     position: absolute;
-    top: 30%;
-    left: 25%;
+    top: 10vh;
+    left: 5vw;
 }
 
 #descriptionbox {
@@ -207,9 +207,9 @@ hr {
 
 .descriptiontext {
     font-style: normal;
-    font-weight: bold;
-    font-size: 1em;
-    letter-spacing: 2px;
+    font-weight: lighter;
+    font-size: 0.8vw;
+    letter-spacing: 0.2vw;
     text-shadow: 1px 1px black;
     color: var(--text-body-color);
 }
@@ -218,10 +218,11 @@ hr {
     height: 10%;
     width: 100%;
     line-height: 1.5;
-    font-size: 1.5em;
+    font-size: 1.2vw;
     color: var(--text-head-color);
     text-align: center;
     position: absolute;
+    top: -3vh;
 }
 
 #cardpoem, #infobody {
@@ -229,8 +230,8 @@ hr {
     width: 80%;
     line-height: 2;
     position: absolute;
-    top: 10%;
-    left: 10%;
+    top: 2vh;
+    left: 3vw;
 }
 
 #cardskill {
@@ -238,6 +239,6 @@ hr {
     width: 80%;
     line-height: 2;
     position: absolute;
-    top: 50%;
-    left: 10%;
+    top: 30vh;
+    left: 3vw;
 }
