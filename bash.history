@@ -1,0 +1,5 @@
+cd Qianqiuxi
+cordova create app io.jocoboy.qianqiuxi
+cd app
+cordova platforms add android
+cordova build android 

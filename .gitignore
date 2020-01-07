@@ -1,1 +1,5 @@
 /.vscode
+hooks/
+node_modules/
+platforms/
+plugins/

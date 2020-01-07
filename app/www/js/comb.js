@@ -263,9 +263,13 @@ function updateCombList(ownedCardList) {
 // The Core funciton to play audios and display combs in a queue.
 function alertComb(key, value, dfn, side) {
     setTimeout(() => { 
+        
         var audioElement = document.getElementById('combaudio');
         audioElement.src = '../audio/'+ value[1] +'.mp3';
-        audioElement.play();
+        var promise = audioElement.play();
+        if (promise !== null){
+            promise.catch(() => {})
+        }
      }, 0 + 2000 * dfn);
     
     setTimeout(() => { setDisplay(alertbox, 'block', key, value, side) }, 0 + 2000 * dfn);
