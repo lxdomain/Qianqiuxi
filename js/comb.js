@@ -195,11 +195,17 @@ function checkComb(ownedCardList) {
                 if (ownedCardList == myOwnedCardList) {
                     myCompletedCombList.set(key, value);
                     console.log('~我方 完成组对[' + value[1] + ']' + ' 获得额外分值' + value[0] + '分');
+                    // var audioElement = document.getElementById('combaudio');
+                    // audioElement.src = '../audio/'+ value[1] +'.mp3';
+                    // audioElement.play();
                     alertComb(key, value, cnt++, '我方');
                 }
                 else {
                     yourCompletedCombList.set(key, value);
                     console.log('~对方 完成组对[' + value[1] + ']' + ' 获得额外分值' + value[0] + '分');
+                    // var audioElement = document.getElementById('combaudio');
+                    // audioElement.src = '../audio/'+ value[1] +'.mp3';
+                    // audioElement.play();
                     alertComb(key, value, cnt++, '对方');
                 }
             }
@@ -254,7 +260,14 @@ function updateCombList(ownedCardList) {
     }
 }
 
+// The Core funciton to play audios and display combs in a queue.
 function alertComb(key, value, dfn, side) {
+    setTimeout(() => { 
+        var audioElement = document.getElementById('combaudio');
+        audioElement.src = '../audio/'+ value[1] +'.mp3';
+        audioElement.play();
+     }, 0 + 2000 * dfn);
+    
     setTimeout(() => { setDisplay(alertbox, 'block', key, value, side) }, 0 + 2000 * dfn);
     setTimeout(() => { transform(alertbox, 'hide', 'show'); }, 0 + 2000 * dfn);
     setTimeout(() => { transform(alertbox, 'show', 'hide'); }, 1200 + 2000 * dfn);
