@@ -748,14 +748,14 @@ function alertResult() {
     broadcasttext.innerHTML = '点击任意按键退出牌局';
     if (myCurrentScore > yourCurrentScore) {
         var audioElement = document.getElementById('combaudio');
-        audioElement.src = '../audio/win.mp3';
+        audioElement.src = 'audio/win.mp3';
         audioElement.play();
         broadcastimage.innerHTML = '胜利';
         broadcastimage.classList.add('winner');
     }
     else {
         var audioElement = document.getElementById('combaudio');
-        audioElement.src = '../audio/lose.mp3';
+        audioElement.src = 'audio/lose.mp3';
         audioElement.play();
         broadcastimage.innerHTML = '败北';
         broadcastimage.classList.add('loser');
