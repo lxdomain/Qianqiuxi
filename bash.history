@@ -3,3 +3,6 @@ cordova create app io.jocoboy.qianqiuxi
 cd app
 cordova platforms add android
 cordova build android 
+cordova build --release android
+keytool -genkeypair -alias name.keystore -keyalg RSA -validity 4000 -keystore name.keystore 
+jarsigner -verbose -keystore name.keystore -signedjar qqxv1.1.apk app-release-unsigned.apk name.keystore

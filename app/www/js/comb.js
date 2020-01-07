@@ -265,7 +265,7 @@ function alertComb(key, value, dfn, side) {
     setTimeout(() => { 
         
         var audioElement = document.getElementById('combaudio');
-        audioElement.src = '../audio/'+ value[1] +'.mp3';
+        audioElement.src = 'audio/'+ value[1] +'.mp3';
         var promise = audioElement.play();
         if (promise !== null){
             promise.catch(() => {})
